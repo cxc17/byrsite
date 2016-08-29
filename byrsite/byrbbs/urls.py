@@ -4,5 +4,6 @@ from views import *
 
 
 urlpatterns = [
-    url(r'^$', fun)
+    url(r'^$', index),
+    url(r'^\?key=.+?', search)
 ]

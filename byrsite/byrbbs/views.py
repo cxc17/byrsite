@@ -4,9 +4,12 @@ from django.http import HttpResponse
 from models import *
 
 
-def fun(request):
-    m = board
+def index(request):
+    return render(request, 'byrbbs/index.html')
 
+
+def search(request):
+    m = board
     a = m.objects.all()
 
-    return render(request, 'byrbbs/index.html', {'a': a[0].board_name})
+    return HttpResponse("ok")
