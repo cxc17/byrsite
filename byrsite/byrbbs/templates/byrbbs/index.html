@@ -2,44 +2,41 @@
 
 <!DOCTYPE html>
 <html lang="zh-CN">
- <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Icysearch 仅仅是一个搜索引擎</title>
 
-    <!-- Bootstrap -->
-    <link href="http://apps.bdimg.com/libs/bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet" />
-    <link rel="stylesheet" href="{% static 'byrbbs/style.css' %}">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>北邮人论坛搜索</title>
+        <!-- Bootstrap -->
+        <link href="http://apps.bdimg.com/libs/bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet" />
+        <link rel="stylesheet" href="{% static 'byrbbs/style.css' %}"></head>
 
-  </head>
-<body>
-	<div id="bg">
-	</div>
-	<div id="header">
-		<a href="http://search.icybee.cn/bbs" id="title">Icysearch</a>
-		<a href="http://icybee.cn/article/icysearch%E5%BC%80%E6%94%BEapi.html" id="openapi">开放api</a>
-		<a href="http://www.acgn.ren/" id="openapi">谷歌镜像</a>
-		<a href="http://xueshu.icybee.cn" id="openapi">谷歌学术镜像</a>
-		<a href="http://youtube.icybee.cn" id="openapi">油管镜像</a>
-	</div>
-	<div class="container">
-		<div class="row LOGO">
-			<div class="col-md-6 col-md-offset-3 col-xs-12">
-				<img id="LOGO" src="{% static 'byrbbs/images/title.jpg' %}">
-			</div>
-		</div>
-		<div class="row">
-			<div class="col-md-6 col-md-offset-3 col-xs-12">
-                <form id="search" method="GET" action="http://search.icybee.cn/bbs">
-                    <input type="text" id="key" name="key" maxlength="40">
-                    <button type="submit" id="sub-button">搜 索</button>
-                </form>
-			</div>
-		</div>
-		<div id="footer" class="col-md-6 col-md-offset-3 col-xs-12 footer">
-		  <h5>Copyright © 2015 BUPT::icybee &nbsp;| <a href="mailto: icybee@yeah.net">&nbsp;联系我们</a></h5>
-		</div>
-	</div>
-</body>
+    <body>
+        <div id="bg"></div>
+        <div id="header">
+            <a href="/byrbbs" id="title">CxcSearch</a>
+            <a href="http://icybee.cn/article/icysearch%E5%BC%80%E6%94%BEapi.html" id="openapi">开放api</a>
+            <a href="http://www.acgn.ren/" id="openapi">谷歌镜像</a>
+            <a href="http://xueshu.icybee.cn" id="openapi">谷歌学术镜像</a>
+            <a href="http://youtube.icybee.cn" id="openapi">油管镜像</a></div>
+        <div class="container">
+            <div class="row LOGO">
+                <div class="col-md-6 col-md-offset-3 col-xs-12">
+                    <img id="LOGO" src="{% static 'byrbbs/images/title.jpg' %}"></div>
+            </div>
+            <div class="row">
+                <div class="col-md-6 col-md-offset-3 col-xs-12">
+                    <form id="search" method="GET" action="/byrbbs/">
+                        <input type="text" id="key" name="key" maxlength="40">
+                        <button type="submit" id="sub-button">搜 索</button></form>
+                </div>
+            </div>
+            <div id="footer" class="col-md-6 col-md-offset-3 col-xs-12 footer">
+                <h5>Copyright © 2016 BUPT::Cxc_17 &nbsp;|
+                    <a href="mailto: caixiaochuan@sina.cn">&nbsp;联系我们</a></h5>
+            </div>
+        </div>
+    </body>
+
 </html>
