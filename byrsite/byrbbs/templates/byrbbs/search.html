@@ -1,4 +1,5 @@
 {% load static %}
+{% load byrbbs_extras %}
 
 <!DOCTYPE html>
 <html lang="zh-CN">
@@ -7,7 +8,7 @@
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>搜索结果 -- 是</title>
+        <title>{{ key }}_论坛搜索</title>
         <!-- Bootstrap -->
         <link href="http://apps.bdimg.com/libs/bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet" />
         <link rel="stylesheet" href="{% static 'byrbbs/searchstyle.css' %}">
@@ -19,41 +20,57 @@
                 <a href="/byrbbs">Cxcsearch</a></div>
             <div class="header-search">
                 <form id="form" method="GET" action="/byrbbs/">
-                    <input type="text" id="bbssearch" name="key" maxlength="40" value="是">
+                    <input type="text" id="bbssearch" name="key" maxlength="40" value="{{ key }}">
                     <button type="submit" id="search-button" class="search-button">搜 索</button></form>
             </div>
         </div>
         <div class="container">
             <div class="declare">
                 <div class="list-declare box">本站是一个bbs内容搜索引擎，从byrbbs抓取数据，用于学习，分析和研究。内容是本站根据您的指令自动搜索的结果，不代表本站赞成资源的内容或立场，文章的版权归论坛和文章作者所有。</div>
-                <div style="margin-top:30px">
-                    <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-                    <!-- search_side -->
-                    <ins class="adsbygoogle" style="display:inline-block;width:160px;height:600px" data-ad-client="ca-pub-7332390308156427" data-ad-slot="9194146799"></ins>
-                    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script></div>
             </div>
             <div class="list-container">
                 <div class="list-main">
-                    <p class="list-info">Icysearch 搜索耗时 0.00918889045715 秒</p></div>
+                    <p class="list-info">Cxcsearch 搜索耗时{{ search_time }}秒</p></div>
+{#                <ul class="list box">#}
+{#                    <li>#}
+{#                        <p>#}
+{#                            <a href="http://bbs.byr.cn/article/Communications/18586" target="_blank">有人在研究分布式天线系统（#}
+{#                                <b>DAS</b>）吗？</a>#}
+{#                        </p>#}
+{#                        学校实验室有人在研究分布式天线系统<b>DAS</b>）吗？我现在想研究这方面，但是科研刚刚起步，很希望能和其他人多多交流~~有的话，顶个帖呀，我QQ是：490653825 -- FROM 118.229.202.*#}
+{#                    </li>#}
+{#                </ul>#}
+                {% for foo in content %}
+                    <ul class="list box">
+                        <li>
+                            <p>
+                                {{ foo.comment_time | date:"D M d H:i:s Y" }}
+                                <a href={{ foo.comment_url }} target="_blank">
+                                    {{ foo.comment_content}}
+                                </a>
+                            </p>
+{#                            学校实验室有人在研究分布式天线系统<b>DAS</b>）吗？我现在想研究这方面，但是科研刚刚起步，很希望能和其他人多多交流~~有的话，顶个帖呀，我QQ是：490653825 -- FROM 118.229.202.*#}
+                        </li>
+                    </ul>
+                {% endfor %}
+
+
+                {% if page_max > 1%}
                 <div class="list-pagination" id="page">
-                    <a href="?key=是&p=0" jp-role="last" jp-data="上一页">上一页</a>
-                    <a href="?key=是&p=1" jp-role="page" jp-data="1" class="active">1</a>
-                    <a href="?key=是&p=2" jp-role="page" jp-data="2">2</a>
-                    <a href="?key=是&p=3" jp-role="page" jp-data="3">3</a>
-                    <a href="?key=是&p=4" jp-role="page" jp-data="4">4</a>
-                    <a href="?key=是&p=5" jp-role="page" jp-data="5">5</a>
-                    <a href="?key=是&p=6" jp-role="page" jp-data="6">6</a>
-                    <a href="?key=是&p=7" jp-role="page" jp-data="7">7</a>
-                    <a href="?key=是&p=8" jp-role="page" jp-data="8">8</a>
-                    <a href="?key=是&p=9" jp-role="page" jp-data="9">9</a>
-                    <a href="?key=是&p=2" jp-role="last" jp-data="下一页">下一页</a></div>
+                    <a href="?key={{ key }}&p={{  page|add:"1" }}" jp-role="last" jp-data="上一页">上一页</a>
+                    {% for page_num in page | page_list_pre %}
+                        <a href="?key={{ key }}&p={{ page_num }}" jp-role="page" jp-data={{ page_num }}>{{ page_num }}</a>
+                    {% endfor %}
+                    <a href="?key={{ key }}&p={{ page }}" jp-role="page" jp-data="1" class="active">{{ page }}</a>
+                    {% for page_num in page | page_list_next:page_max %}
+                        <a href="?key={{ key }}&p={{ page_num }}" jp-role="page" jp-data={{ page_num }}>{{ page_num }}</a>
+                    {% endfor %}
+                    <a href="?key={{ key }}&p={{  page|add:"1" }}" jp-role="last" jp-data="下一页">下一页</a>
+                </div>
+                {% endif %}
+
             </div>
         </div>
-        <!-- head -->
-        <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-        <!-- head -->
-        <ins class="adsbygoogle" style="display:inline-block;width:728px;height:90px" data-ad-client="ca-pub-7332390308156427" data-ad-slot="7509250797"></ins>
-        <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
         <div class="row">
             <div id="footer-2">
                 <h5>Copyright © 2016 BUPT::Cxc_17 &nbsp;|

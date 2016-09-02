@@ -80,7 +80,8 @@ DATABASES = {
         # 'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'byr',
-        'HOST': 'localhost',
+        # 'HOST': '127.0.0.1',
+        'HOST': '192.168.1.98',
         'USER': 'root',
         'PASSWORD': '123456',
     }
