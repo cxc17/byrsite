@@ -3,7 +3,7 @@ from django import template
 register = template.Library()
 
 
-@register.filter('page_list_pre')
+@register.filter
 def page_list_pre(page):
     page = int(page)
     if page <= 5:
@@ -19,3 +19,7 @@ def page_list_next(page, page_max):
         return range(page+1, page_max+1)
     else:
         return range(page+1, page+5)
+
+
+
+

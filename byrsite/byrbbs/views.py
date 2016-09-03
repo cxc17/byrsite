@@ -1,7 +1,7 @@
 # coding: utf-8
 
 from django.shortcuts import render
-from django.http import HttpResponse
+from django.http import Http404
 import time
 
 from models import *
@@ -20,7 +20,10 @@ def search(request):
     # 获取参数
     key = request.GET.get("key")
     if "p" in request.GET:
-        page = int(request.GET.get("p"))
+        try:
+            page = int(request.GET.get("p"))
+        except:
+            return Http404()
     else:
         page = 1
 
@@ -28,15 +31,19 @@ def search(request):
     search_count = content.count()
 
     if search_count % 10:
-        page_max = search_count / 10
-    else:
         page_max = search_count / 10 + 1
+    else:
+        page_max = search_count / 10
 
-    if page == 0 or page == 1:
+    if page <= 0:
+        page = 1
+        content = content[:10]
+    elif page == 1:
         content = content[:10]
     elif page <= page_max:
         content = content[(page-1)*10:page*10]
     else:
+        page = page_max
         content = content[(page_max-1)*10:]
 
     end_time = time.time()

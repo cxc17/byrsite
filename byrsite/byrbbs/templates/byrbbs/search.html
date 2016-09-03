@@ -57,12 +57,12 @@
 
                 {% if page_max > 1%}
                 <div class="list-pagination" id="page">
-                    <a href="?key={{ key }}&p={{  page|add:"1" }}" jp-role="last" jp-data="上一页">上一页</a>
-                    {% for page_num in page | page_list_pre %}
+                    <a href="?key={{ key }}&p={{  page|add:"-1" }}" jp-role="last" jp-data="上一页">上一页</a>
+                    {% for page_num in page|page_list_pre %}
                         <a href="?key={{ key }}&p={{ page_num }}" jp-role="page" jp-data={{ page_num }}>{{ page_num }}</a>
                     {% endfor %}
                     <a href="?key={{ key }}&p={{ page }}" jp-role="page" jp-data="1" class="active">{{ page }}</a>
-                    {% for page_num in page | page_list_next:page_max %}
+                    {% for page_num in page|page_list_next:page_max %}
                         <a href="?key={{ key }}&p={{ page_num }}" jp-role="page" jp-data={{ page_num }}>{{ page_num }}</a>
                     {% endfor %}
                     <a href="?key={{ key }}&p={{  page|add:"1" }}" jp-role="last" jp-data="下一页">下一页</a>

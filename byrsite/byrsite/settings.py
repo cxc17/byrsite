@@ -23,9 +23,9 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'k*!i#@5w$j&_0v#_nrw9rf*bjy&p!8#k*59)^k1h3d%0%h%7z='
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["127.0.0.1"]
 
 
 # Application definition
@@ -80,8 +80,8 @@ DATABASES = {
         # 'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'byr',
-        # 'HOST': '127.0.0.1',
-        'HOST': '192.168.1.98',
+        'HOST': '127.0.0.1',
+        # 'HOST': '192.168.1.98',
         'USER': 'root',
         'PASSWORD': '123456',
     }
@@ -125,3 +125,9 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.10/howto/static-files/
 
 STATIC_URL = '/static/'
+
+# # print BASE_DIR
+# STATICFILES_DIRS = [
+#     "/Users/caixiaochuan/Desktop/byrsite/byrsite/byrbbs/static",
+#   # os.path.join(BASE_DIR, '../byrbbs/'),
+# ]
