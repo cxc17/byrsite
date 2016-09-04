@@ -1,4 +1,4 @@
-{% load static %}
+{% load staticfiles %}
 {% load byrbbs_extras %}
 
 <!DOCTYPE html>
@@ -17,7 +17,7 @@
     <body>
         <div id="header">
             <div class="header-brand">
-                <a href="/byrbbs">Cxcsearch</a></div>
+                <a href="/byrbbs">ByrSearch</a></div>
             <div class="header-search">
                 <form id="form" method="GET" action="/byrbbs/">
                     <input type="text" id="bbssearch" name="key" maxlength="40" value="{{ key }}">
@@ -30,7 +30,7 @@
             </div>
             <div class="list-container">
                 <div class="list-main">
-                    <p class="list-info">Cxcsearch 搜索耗时{{ search_time }}秒</p></div>
+                    <p class="list-info">ByrSearch 搜索耗时{{ search_time }}秒</p></div>
 {#                <ul class="list box">#}
 {#                    <li>#}
 {#                        <p>#}
@@ -57,7 +57,12 @@
 
                 {% if page_max > 1%}
                 <div class="list-pagination" id="page">
-                    <a href="?key={{ key }}&p={{  page|add:"-1" }}" jp-role="last" jp-data="上一页">上一页</a>
+                    {% if page == 1%}
+                        <a href="?key={{ key }}&p={{ page }}" jp-role="last" jp-data="上一页">上一页</a>
+                    {% else %}
+                        <a href="?key={{ key }}&p={{ page|add:"-1" }}" jp-role="last" jp-data="上一页">上一页</a>
+                    {% endif %}
+
                     {% for page_num in page|page_list_pre %}
                         <a href="?key={{ key }}&p={{ page_num }}" jp-role="page" jp-data={{ page_num }}>{{ page_num }}</a>
                     {% endfor %}
@@ -65,7 +70,12 @@
                     {% for page_num in page|page_list_next:page_max %}
                         <a href="?key={{ key }}&p={{ page_num }}" jp-role="page" jp-data={{ page_num }}>{{ page_num }}</a>
                     {% endfor %}
-                    <a href="?key={{ key }}&p={{  page|add:"1" }}" jp-role="last" jp-data="下一页">下一页</a>
+
+                    {% if page == page_max%}
+                        <a href="?key={{ key }}&p={{ page }}" jp-role="last" jp-data="下一页">下一页</a>
+                    {% else %}
+                        <a href="?key={{ key }}&p={{ page|add:"1" }}" jp-role="last" jp-data="下一页">下一页</a>
+                    {% endif %}
                 </div>
                 {% endif %}
 

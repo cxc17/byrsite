@@ -1,7 +1,6 @@
 # coding: utf-8
 
 from django.shortcuts import render
-from django.http import Http404
 import time
 
 from models import *
@@ -23,7 +22,7 @@ def search(request):
         try:
             page = int(request.GET.get("p"))
         except:
-            return Http404()
+            page = 1
     else:
         page = 1
 
