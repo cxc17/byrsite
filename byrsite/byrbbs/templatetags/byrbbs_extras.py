@@ -21,5 +21,9 @@ def page_list_next(page, page_max):
         return range(page+1, page+5)
 
 
-
-
+@register.filter
+def content_output_max(content):
+    if len(content) < 200:
+        return content
+    else:
+        return content[:200] + u" ..."

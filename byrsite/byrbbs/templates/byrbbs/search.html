@@ -17,7 +17,9 @@
     <body>
         <div id="header">
             <div class="header-brand">
-                <a href="/byrbbs">ByrSearch</a></div>
+                <a href="/byrbbs">
+                <img src="{% static 'byrbbs/images/logo.png' %}"  width="100" height="35">
+                </a></div>
             <div class="header-search">
                 <form id="form" method="GET" action="/byrbbs/">
                     <input type="text" id="bbssearch" name="key" maxlength="40" value="{{ key }}">
@@ -31,29 +33,35 @@
             <div class="list-container">
                 <div class="list-main">
                     <p class="list-info">ByrSearch 搜索耗时{{ search_time }}秒</p></div>
-{#                <ul class="list box">#}
-{#                    <li>#}
-{#                        <p>#}
-{#                            <a href="http://bbs.byr.cn/article/Communications/18586" target="_blank">有人在研究分布式天线系统（#}
-{#                                <b>DAS</b>）吗？</a>#}
-{#                        </p>#}
-{#                        学校实验室有人在研究分布式天线系统<b>DAS</b>）吗？我现在想研究这方面，但是科研刚刚起步，很希望能和其他人多多交流~~有的话，顶个帖呀，我QQ是：490653825 -- FROM 118.229.202.*#}
-{#                    </li>#}
-{#                </ul>#}
-                {% for foo in content %}
-                    <ul class="list box">
-                        <li>
-                            <p>
-                                {{ foo.comment_time | date:"D M d H:i:s Y" }}
-                                <a href={{ foo.comment_url }} target="_blank">
-                                    {{ foo.comment_content}}
-                                </a>
-                            </p>
-{#                            学校实验室有人在研究分布式天线系统<b>DAS</b>）吗？我现在想研究这方面，但是科研刚刚起步，很希望能和其他人多多交流~~有的话，顶个帖呀，我QQ是：490653825 -- FROM 118.229.202.*#}
-                        </li>
-                    </ul>
-                {% endfor %}
+                {% for result in search_result %}
+                    <div class="list box">
+                        <h4>
+                            <a href={{ result.post_url }} target="_blank">
+                                {{ result.post_title}}
+                            </a>
+                        </h4>
+                        <br/>
+                        <div>
+                            <span>
+                            <a href={{ result.post_url }} target="_blank">
+                                {{ result.post_url}}
+                            </a>&nbsp;&nbsp; 发信人：
+                            </span>
+                            <a href={{ result.post_url }} target="_blank">
+                                {{ result.author_id}}({{ result.author_name }})
+                            </a>
+                            <span>
+                                &nbsp;&nbsp;{{ result.post_time | date:"D M d H:i:s Y" }}
+                            </span>
 
+                        </div>
+                        <br/>
+                        <p>
+                            {{ result.post_content|content_output_max}}
+                        </p>
+
+                    </div>
+                {% endfor %}
 
                 {% if page_max > 1%}
                 <div class="list-pagination" id="page">

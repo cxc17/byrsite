@@ -26,8 +26,8 @@ def search(request):
     else:
         page = 1
 
-    content = byr_comment.objects.filter(commenter_id=key).order_by("-comment_time")
-    search_count = content.count()
+    result = byr_post.objects.filter(author_id=key).order_by("-post_time")
+    search_count = result.count()
 
     if search_count % 10:
         page_max = search_count / 10 + 1
@@ -36,17 +36,17 @@ def search(request):
 
     if page <= 0:
         page = 1
-        content = content[:10]
+        search_result = result[:10]
     elif page == 1:
-        content = content[:10]
+        search_result = result[:10]
     elif page <= page_max:
-        content = content[(page-1)*10:page*10]
+        search_result = result[(page-1)*10:page*10]
     else:
         page = page_max
-        content = content[(page_max-1)*10:]
+        search_result = result[(page_max-1)*10:]
 
     end_time = time.time()
     search_time = end_time - start_time
 
     return render(request, 'byrbbs/search.html', {"key": key, "page": page, "search_time": search_time,
-                                                  "content": content, "page_max": page_max})
+                                                  "search_result": search_result, "page_max": page_max})
