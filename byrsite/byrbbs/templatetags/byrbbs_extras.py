@@ -27,3 +27,10 @@ def content_output_max(content):
         return content
     else:
         return content[:200] + u" ..."
+
+
+@register.filter
+def search_time(search_time):
+    search_time = round(search_time, 3)
+
+    return search_time

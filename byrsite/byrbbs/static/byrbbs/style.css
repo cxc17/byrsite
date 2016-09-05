@@ -8,12 +8,11 @@ body,h1{
 #bg {
     position: absolute;
     z-index: -1;
-    background: url("images/background.jpg")  fixed;
+    background: url("images/background.jpg") fixed;
     background-size:cover;
     height: 100%;
 	width: 100%;
 }
-
 
 #header{
 	position: absolute;
@@ -87,7 +86,6 @@ body,h1{
 	bottom: 0;
 	left: 0;
 }
-
 
 
 @media (min-width: 992px){

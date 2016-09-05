@@ -49,4 +49,5 @@ def search(request):
     search_time = end_time - start_time
 
     return render(request, 'byrbbs/search.html', {"key": key, "page": page, "search_time": search_time,
-                                                  "search_result": search_result, "page_max": page_max})
+                                                  "search_result": search_result, "page_max": page_max,
+                                                  "search_count": search_count})
