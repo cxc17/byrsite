@@ -1,4 +1,6 @@
 from django import template
+import re
+
 
 register = template.Library()
 
@@ -27,6 +29,31 @@ def content_output_max(content):
         return content
     else:
         return content[:200] + u" ..."
+
+
+@register.filter
+def search_key(content, key):
+    if len(content) < 200:
+        content = content
+    else:
+        content = content[:200] + u" ..."
+
+    result = []
+    if key in content:
+        content_iter = re.finditer("%s" % key, content)
+
+        start = 0
+        for citer in content_iter:
+            end = citer.start()
+            result.append(content[start:end])
+            result.append(key)
+            start = citer.end()
+
+        result.append(content[start:])
+        return result
+    else:
+        result.append(content)
+        return result
 
 
 @register.filter

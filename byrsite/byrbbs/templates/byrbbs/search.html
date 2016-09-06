@@ -2,14 +2,14 @@
 {% load byrbbs_extras %}
 
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="zh-CN" xmlns="http://www.w3.org/1999/html">
     
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>{{ key }}_论坛搜索</title>
-        <!-- Bootstrap -->
+        <link rel="icon" sizes="any" mask="" href="{% static 'byrbbs/images/logo_title.png' %}">
         <link href="http://apps.bdimg.com/libs/bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet" />
         <link rel="stylesheet" href="{% static 'byrbbs/searchstyle.css' %}">
     </head>
@@ -18,7 +18,7 @@
         <div id="header">
             <div class="header-brand">
                 <a href="/byrbbs">
-                <img src="{% static 'byrbbs/images/logo.png' %}"  width="100" height="30">
+                <img src="{% static 'byrbbs/images/logo.png' %}"  width="100" height="28">
                 </a></div>
             <div class="header-search">
                 <form id="form" method="GET" action="/byrbbs/">
@@ -27,12 +27,40 @@
             </div>
         </div>
         <div class="container">
-            <div class="declare">
-                <div class="list-declare box">本站是一个bbs内容搜索引擎，从byrbbs抓取数据，用于学习，分析和研究。内容是本站根据您的指令自动搜索的结果，不代表本站赞成资源的内容或立场，文章的版权归论坛和文章作者所有。</div>
-            </div>
+{#            <div class="declare">#}
+{#                <div class="list-declare box">本站是一个bbs内容搜索引擎，从byrbbs抓取数据，用于学习，分析和研究。内容是本站根据您的指令自动搜索的结果，不代表本站赞成资源的内容或立场，文章的版权归论坛和文章作者所有。</div>#}
+{#            </div>#}
             <div class="list-container">
                 <div class="list-main">
-                    <p class="list-info">找到 {{ search_count }} 条结果 (用时{{ search_time|search_time }}秒)</p></div>
+                    <p class="list-info">
+                        <br/>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        {% if page > 1%}
+                            找到 {{ search_count }} 条结果，以下是第 {{ page }} 页 ( 用时{{ search_time|search_time }}秒 )
+                        {% else %}
+                            找到 {{ search_count }} 条结果 ( 用时{{ search_time|search_time }}秒 )
+                        {% endif %}
+
+                    </p></div>
+                {% if search_count == 0%}
+                    <div class="list box">
+                        <p style="padding-top:.33em"> 抱歉，没有找到和您查询的"<b>{{ key }}</b>"相符的内容。</p>
+                        <p style="margin-top:1em">建议：
+                            <br/><br/>
+                            ● 请检查输入字词有无错误。
+                            <br/>
+                            ● 请尝试其他查询词。
+                            <br/>
+                            ● 请改用较常见的字词。</p>
+                    <br/><br/><br/><br/><br/><br/><br/><br/>
+                    <br/><br/><br/><br/><br/><br/><br/><br/>
+                    <br/><br/><br/><br/><br/><br/><br/><br/>
+                    </div>
+                {% endif %}
+
                 {% for result in search_result %}
                     <div class="list box">
                         <h4>
@@ -48,45 +76,59 @@
                             </a>&nbsp;&nbsp; 发信人：
                             </span>
                             <a href={{ result.post_url }} target="_blank">
-                                {{ result.author_id}}({{ result.author_name }})
+                                {% for search_content in result.author_id|search_key:key %}
+                                    {% if search_content == key %}
+                                        <b>{{ key }}</b>
+                                    {% else %}
+                                        {{ search_content }}
+                                    {% endif %}
+                                {% endfor %}
+                                (
+                                {% for search_content in result.author_name|search_key:key %}
+                                    {% if search_content == key %}
+                                        <b>{{ key }}</b>
+                                    {% else %}
+                                        {{ search_content }}
+                                    {% endif %}
+                                {% endfor %}
+                                )
                             </a>
                             <span>
-                                &nbsp;&nbsp;{{ result.post_time | date:"D M d H:i:s Y" }}
+                                &nbsp;&nbsp;{{ result.post_time|date:"D M d H:i:s Y" }}
                             </span>
-
                         </div>
                         <br/>
-                        <p>
-                            {{ result.post_content|content_output_max}}
-                        </p>
-
+                        <p>{{ result.post_content|content_output_max}}</p>
                     </div>
                 {% endfor %}
-
+            <br/>
                 {% if page_max > 1%}
                 <div class="list-pagination" id="page">
-                    {% if page == 1%}
-                        <a href="?key={{ key }}&p={{ page }}" jp-role="last" jp-data="上一页">上一页</a>
-                    {% else %}
-                        <a href="?key={{ key }}&p={{ page|add:"-1" }}" jp-role="last" jp-data="上一页">上一页</a>
+                    {% if page > 1%}
+{#                        <a href="?key={{ key }}&p={{ page }}" jp-role="last" jp-data="上一页">上一页</a>#}
+{#                    {% else %}#}
+                        <a href="?key={{ key }}&p={{ page|add:"-1" }}" jp-role="last" jp-data="上一页">&lt;上一页</a>
                     {% endif %}
 
                     {% for page_num in page|page_list_pre %}
                         <a href="?key={{ key }}&p={{ page_num }}" jp-role="page" jp-data={{ page_num }}>{{ page_num }}</a>
                     {% endfor %}
+
                     <a href="?key={{ key }}&p={{ page }}" jp-role="page" jp-data="1" class="active">{{ page }}</a>
+
                     {% for page_num in page|page_list_next:page_max %}
                         <a href="?key={{ key }}&p={{ page_num }}" jp-role="page" jp-data={{ page_num }}>{{ page_num }}</a>
                     {% endfor %}
 
-                    {% if page == page_max%}
-                        <a href="?key={{ key }}&p={{ page }}" jp-role="last" jp-data="下一页">下一页</a>
-                    {% else %}
-                        <a href="?key={{ key }}&p={{ page|add:"1" }}" jp-role="last" jp-data="下一页">下一页</a>
+                    {% if page < page_max%}
+{#                        <a href="?key={{ key }}&p={{ page }}" jp-role="last" jp-data="下一页">下一页</a>#}
+{#                    {% else %}#}
+                        <a href="?key={{ key }}&p={{ page|add:"1" }}" jp-role="last" jp-data="下一页">下一页&gt;</a>
                     {% endif %}
                 </div>
                 {% endif %}
 
+            <br/>
             </div>
         </div>
         <div class="row">

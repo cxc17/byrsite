@@ -3,7 +3,6 @@ body,h1,li{
 	padding: 0;
 	list-style: none;
 	font-family: 'Microsoft Yahei', sans-serif;
-	list-style: none;
 }
 
 #header{
@@ -12,7 +11,7 @@ body,h1,li{
 	top: 0;
 	left: 0;
 	width: 100%;
-	height: 50px;
+	height: 60px;
 	background: #f0f0f0;
 	border-bottom: 1px solid #e7e7e7
 }
@@ -21,7 +20,7 @@ body,h1,li{
 	float: left;
 	font-size: 20px;
 	color: #777;
-	line-height: 50px;
+	line-height: 60px;
 	margin: 0 20px 0 10px;
 }
 
@@ -29,11 +28,12 @@ body,h1,li{
 	font-size: 14px;
 	float: left;
 	overflow: hidden;
-	height: 34px;
-	margin: 8px 0 8px 10px;
+	height: 44px;
+	margin: 10px 0 8px 10px;
 }
 
 #bbssearch{
+	height: 40px;
 	padding: 6px;
 	border: 1px solid #ccc;
 	/*border-radius: 4px;*/
@@ -41,16 +41,15 @@ body,h1,li{
 }
 
 .search-button{
-	height: 34px;
+	height: 40px;
 	border: 1px solid #ccc;
 	/*border-radius: 4px;*/
 	background-color: #fff;
-	padding: 0 8px;
+	padding: 0 10px;
 	outline: none;
 	/*float: right;*/
 
 }
-
 
 
 .container{
@@ -62,7 +61,8 @@ body,h1,li{
 }
 
 .list-info{
-	display: inline-block;
+	text-align: left;
+	/*display: inline-block;*/
 	font-size: 12px;
 	color: #999;
 }
@@ -73,8 +73,8 @@ body,h1,li{
 
 .list h4 a{
 	float: left;
-	color: #1a0dab;
-	font-family: 微软雅黑;
+	color: #1a0daa;
+	font-family: 'Catull';
 }
 
 .list div a{
@@ -109,27 +109,29 @@ body,h1,li{
 
 /*.list li{*/
 	/*display: block;*/
-	/*!*width: auto;*!*/
+	/*width: auto;*/
 	/*margin: 15px;*/
+	/*float: left;*/
 /*}*/
 
 .list-pagination a {
-  font-size: 14px;
-  line-height: 35px;
-  display: block;
-  float: left;
-  height: 35px;
-  margin: 0 -1px 0 0;
-  padding: 0 13px;
-  color: #2a6496;
-  border: 1px solid #ddd;
-  margin: 10px auto;
+	font-size: 14px;
+	line-height: 35px;
+	display: block;
+	float: left;
+	height: 35px;
+	/*margin: 0 -1px 0 0;*/
+	margin: 0 5px 0 5px;
+	padding: 0 13px;
+	color: #4284f3;
+	border: 1px solid #ddd;
+	/*margin: 10px auto;*/
 }
 
 .list-pagination a.active {
-  color: #fff;
-  border: 1px solid #428bca;
-  background-color: #428bca;
+	color: #000;
+  	border: 1px solid #fff;
+  	background-color: #fff;
 }
 
 #page{
@@ -175,12 +177,12 @@ body,h1,li{
 }
 
 b{
-	color: #c00;
+	color: #dc4b39;
 }
 
 @media (min-width: 300px){
 	#bbssearch{
-		width: 130px;
+		width: 330px;
 	}
 	.list{
 		width: auto;
@@ -197,7 +199,7 @@ b{
 	}
 
 	#bbssearch{
-		width: 250px;
+		width: 450px;
 	}
 
 	.list,
@@ -218,7 +220,7 @@ b{
 	}
 
 	#bbssearch{
-		width: 350px;
+		width: 550px;
 	}
 
 	.list,
