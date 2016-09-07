@@ -1,3 +1,5 @@
+# coding: utf-8
+
 from django import template
 import re
 
@@ -5,6 +7,7 @@ import re
 register = template.Library()
 
 
+# 返回当前页之前的页数
 @register.filter
 def page_list_pre(page):
     page = int(page)
@@ -14,6 +17,7 @@ def page_list_pre(page):
         return range(page-4, page)
 
 
+# 返回当前页之后的页数
 @register.filter
 def page_list_next(page, page_max):
     page = int(page)
@@ -23,6 +27,7 @@ def page_list_next(page, page_max):
         return range(page+1, page+5)
 
 
+# 返回最多200字节的内容
 @register.filter
 def content_output_max(content):
     if len(content) < 200:
@@ -31,6 +36,7 @@ def content_output_max(content):
         return content[:200] + u" ..."
 
 
+# 对输出的内容进行整理,如果含有关键字进行提取切分
 @register.filter
 def search_key(content, key):
     if len(content) < 200:
@@ -38,24 +44,27 @@ def search_key(content, key):
     else:
         content = content[:200] + u" ..."
 
+    content_iter = re.finditer("%s" % key, content, re.I)
+
     result = []
-    if key in content:
-        content_iter = re.finditer("%s" % key, content)
+    start = 0
+    for citer in content_iter:
+        end = citer.start()
+        result.append(content[start:end])
+        result.append(content[citer.start():citer.end()])
+        start = citer.end()
 
-        start = 0
-        for citer in content_iter:
-            end = citer.start()
-            result.append(content[start:end])
-            result.append(key)
-            start = citer.end()
-
-        result.append(content[start:])
-        return result
-    else:
-        result.append(content)
-        return result
+    result.append(content[start:])
+    return result
 
 
+# 关键字判断
+@register.filter
+def judge_key(content, key):
+    return re.match("%s" %key, content, re.I)
+
+
+# 对搜索时间进行
 @register.filter
 def search_time(search_time):
     search_time = round(search_time, 3)

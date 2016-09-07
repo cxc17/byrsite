@@ -77,16 +77,16 @@
                             </span>
                             <a href={{ result.post_url }} target="_blank">
                                 {% for search_content in result.author_id|search_key:key %}
-                                    {% if search_content == key %}
-                                        <b>{{ key }}</b>
+                                    {% if search_content|judge_key:key %}
+                                        <b>{{ search_content }}</b>
                                     {% else %}
                                         {{ search_content }}
                                     {% endif %}
                                 {% endfor %}
                                 (
                                 {% for search_content in result.author_name|search_key:key %}
-                                    {% if search_content == key %}
-                                        <b>{{ key }}</b>
+                                    {% if search_content|judge_key:key %}
+                                        <b>{{ search_content }}</b>
                                     {% else %}
                                         {{ search_content }}
                                     {% endif %}
