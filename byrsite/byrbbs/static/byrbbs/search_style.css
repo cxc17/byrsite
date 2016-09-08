@@ -1,7 +1,7 @@
 body,h1,li{
 	margin: 0;
 	padding: 0;
-	list-style: none;
+	/*list-style: none;*/
 	font-family: 'Microsoft Yahei', sans-serif;
 }
 
@@ -56,9 +56,9 @@ body,h1,li{
 	margin: 65px 0 0 0;
 }
 
-.list-container{
-	text-align: center;
-}
+/*.list-container{*/
+	/*text-align: center;*/
+/*}*/
 
 .list-info{
 	text-align: left;
@@ -125,7 +125,6 @@ body,h1,li{
 	padding: 0 13px;
 	color: #4284f3;
 	border: 1px solid #ddd;
-	/*margin: 10px auto;*/
 }
 
 .list-pagination a.active {
