@@ -1,0 +1,60 @@
+{% load staticfiles %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{  user_info.id }}_用户搜索</title>
+    <link rel="stylesheet" href="{% static 'byrbbs/userInfo_style.css' %}">
+</head>
+<body>
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+            &times;
+        </button>
+        <h5 class="modal-title" id="myModalLabel">
+            用户信息
+        </h5>
+    </div>
+	<div class="row clearfix">
+        <div class="bbs_header">
+            <span class="bbs_span">{{ user_info.id }}</span> 发问候信 | 加为好友
+            <br/>
+            <span>基本信息</span>
+        </div>
+        <HR  width="94%" color=#987cb9>
+        <div class="col-md-3 column">
+            <img  src={{ user_info.face_url }} />
+        </div>
+        <div class="col-md-9 column">
+            <dl>
+                <dd>昵 称:&nbsp;&nbsp;{{ user_info.user_name }}</dd>
+                <dd>性 别:&nbsp;&nbsp;{{ user_info.gender }}</dd>
+                <dd>星 座:&nbsp;&nbsp;{{ user_info.astro }}</dd>
+                <dd>&nbsp;&nbsp;QQ:&nbsp;&nbsp;{{ user_info.qq }}</dd>
+                <dd> MSN:&nbsp;&nbsp;{{ user_info.msn }}</dd>
+                <dd>主 页:&nbsp;&nbsp;{{ user_info.home_page }}</dd>
+            </dl>
+        </div>
+        <div class="col-md-12 column">
+            <span class="bbs_span">论坛属性</span>
+        </div>
+        <HR  width="94%" color=#987cb9>
+        <div class="col-md-12 column">
+            <dl>
+                <dd id="bbs_art">论坛等级:&nbsp;&nbsp;&nbsp;{{ user_info.level }}</dd>
+                <dd id="bbs_art">帖子总数:&nbsp;&nbsp;&nbsp;{{ user_info.post_count }}篇</dd>
+                <dd id="bbs_art">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;积分:&nbsp;&nbsp;&nbsp;{{ user_info.score }}</dd>
+                <dd id="bbs_art">&nbsp;&nbsp;&nbsp;生命力:&nbsp;&nbsp;&nbsp;{{ user_info.life }}</dd>
+                <dd id="bbs_art">上次登录:&nbsp;&nbsp;&nbsp;{{ user_info.last_login_time }}</dd>
+                <dd>&nbsp;最后访问IP:&nbsp;&nbsp;&nbsp;{{ user_info.last_login_ip }}</dd>
+                <dd id="bbs_art">当前状态:&nbsp;&nbsp;&nbsp;{{ user_info.status }}</dd>
+            </dl>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">关闭
+        </button>
+    </div>
+</body>
+</html>
