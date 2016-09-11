@@ -46,15 +46,15 @@ def search_key(content, key):
 
     content_iter = re.finditer("%s" % key, content, re.I)
 
-    result = []
+    result = ""
     start = 0
     for citer in content_iter:
         end = citer.start()
-        result.append(content[start:end])
-        result.append(content[citer.start():citer.end()])
+        result += content[start:end]
+        result = result + '<b>' + content[citer.start():citer.end()] + '</b>'
         start = citer.end()
 
-    result.append(content[start:])
+    result += content[start:]
     return result
 
 
@@ -70,3 +70,14 @@ def search_time(search_time):
     search_time = round(search_time, 3)
 
     return search_time
+
+
+# 对图片的大小进行处理
+@register.filter
+def image_length(length):
+    if length == 0:
+        return 140
+    elif length > 140:
+        return 140
+    else:
+        return length

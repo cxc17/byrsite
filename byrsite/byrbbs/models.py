@@ -14,14 +14,14 @@ class byr_board(models.Model):
 
 class byr_post(models.Model):
     post_id = models.CharField(max_length=16)
-    post_title = models.CharField(max_length=255)
-    post_url = models.CharField(max_length=255)
-    post_content = models.TextField(blank=True)
-    author_id = models.CharField(max_length=255)
-    author_name = models.CharField(max_length=255)
+    title = models.CharField(max_length=255)
+    url = models.CharField(max_length=255)
+    content = models.TextField(blank=True)
+    user_id = models.CharField(max_length=255)
+    user_name = models.CharField(max_length=255)
     board_name = models.CharField(max_length=255)
-    post_num = models.IntegerField
-    post_time = models.DateTimeField(blank=True)
+    post_num = models.IntegerField()
+    publish_time = models.DateTimeField(blank=True)
     last_time = models.DateTimeField(blank=True)
     # insert_time = models.DateTimeField
 
@@ -31,12 +31,38 @@ class byr_post(models.Model):
 
 class byr_comment(models.Model):
     post_id = models.CharField(max_length=16)
-    comment_url = models.CharField(max_length=255)
-    comment_content = models.TextField(blank=True)
-    commenter_id = models.CharField(max_length=255)
-    commenter_name = models.CharField(max_length=255)
-    comment_time = models.DateTimeField(blank=True)
+    title = models.CharField(max_length=255)
+    url = models.CharField(max_length=255)
+    content = models.TextField(blank=True)
+    user_id = models.CharField(max_length=255)
+    user_name = models.CharField(max_length=255)
+    publish_time = models.DateTimeField(blank=True)
     # insert_time = models.DateTimeField
 
     class Meta:
         db_table = 'comment'
+
+
+class byr_user(models.Model):
+    user_id = models.CharField(max_length=255)
+    user_name = models.CharField(max_length=255)
+    gender = models.CharField(max_length=255)
+    astro = models.CharField(max_length=255)
+    qq = models.CharField(max_length=255)
+    msn = models.CharField(max_length=255)
+
+    home_page = models.CharField(max_length=255)
+    level = models.CharField(max_length=255)
+    post_count = models.IntegerField()
+    score = models.IntegerField()
+    life = models.IntegerField()
+    last_login_time = models.DateTimeField(blank=True)
+
+    last_login_ip = models.CharField(max_length=255)
+    status = models.CharField(max_length=255)
+    face_url = models.CharField(max_length=255)
+    face_height = models.FloatField()
+    face_width = models.FloatField()
+
+    class Meta:
+        db_table = 'user'

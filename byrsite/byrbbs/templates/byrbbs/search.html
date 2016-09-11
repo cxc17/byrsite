@@ -17,8 +17,12 @@
     </head>
 
     <script>
-{#        $(document).ready(function(){#}
-{#            $(".myModal").click(function(){#}
+        $(document).ready(function(){
+            $("#UserModal").on("hidden.bs.modal", function() {
+                $(this).removeData("bs.modal");
+            });
+
+{#            $(".UserModal").click(function(){#}
 {#                getUserInfo();#}
 {#            });#}
 {##}
@@ -26,7 +30,7 @@
 {#                var userUrl = "/byrbbs/user?uid=" +  $(".myModal").text();#}
 {#                console.log(userUrl)#}
 {#            }#}
-{#        });#}
+        });
     </script>
 
     <body>
@@ -79,42 +83,31 @@
                 {% for result in search_result %}
                     <div class="list box">
                         <h4>
-                            <a href={{ result.post_url }} target="_blank">
-                                {{ result.post_title}}
+                            <a href={{ result.url }} target="_blank">
+                                {{ result.title}}
                             </a>
                         </h4>
                         <br/>
                         <div>
                             <span>
-                            <a href={{ result.post_url }} target="_blank">
-                                {{ result.post_url}}
-                            </a>&nbsp;&nbsp; 发信人：
+                            <a href={{ result.url }} target="_blank">
+                                {{ result.url}}
+                            </a>&nbsp;&nbsp;
+                                {% if result.post_num %}
+                                    发帖者：
+                                {% else %}
+                                    跟帖者：
+                                {% endif %}
                             </span>
-
-                            <a href="/byrbbs/user?uid={{ result.author_id }}" data-toggle="modal" data-target="#myModal">
-                                {% for search_content in result.author_id|search_key:key %}
-                                    {% if search_content|judge_key:key %}
-                                        <b>{{ search_content }}</b>
-                                    {% else %}
-                                        {{ search_content }}
-                                    {% endif %}
-                                {% endfor %}
-                                (
-                                {% for search_content in result.author_name|search_key:key %}
-                                    {% if search_content|judge_key:key %}
-                                        <b>{{ search_content }}</b>
-                                    {% else %}
-                                        {{ search_content }}
-                                    {% endif %}
-                                {% endfor %}
-                                )
+                            <a href="/byrbbs/user?uid={{ result.user_id }}" data-toggle="modal" data-target="#UserModal">
+                                {{ result.user_id|search_key:key|safe }}({{ result.user_name|search_key:key|safe }})
                             </a>
                             <span>
-                                &nbsp;&nbsp;{{ result.post_time|date:"D M d H:i:s Y" }}
+                                &nbsp;&nbsp;{{ result.publish_time|date:"D M d H:i:s Y" }}
                             </span>
                         </div>
                         <br/>
-                        <p>{{ result.post_content|content_output_max}}</p>
+                        <p>{{ result.content|content_output_max}}</p>
                     </div>
                 {% endfor %}
             <br/>
@@ -151,7 +144,7 @@
         </div>
 
         {# 用户信息模态框 #}
-        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal fade" id="UserModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
 {#                    <div class="modal-header">#}
