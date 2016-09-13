@@ -30,19 +30,46 @@ def search(request):
         page = 1
 
     # 精确匹配
-    # 以user_id为key搜索
-    post_id_result = byr_post.objects.filter(user_id=key).order_by("-publish_time")
+    post_id_result = byr_post.objects.filter(user_id=key, user_name=key).order_by("-publish_time")
     post_id_count = post_id_result.count()
-    comment_id_result = byr_comment.objects.filter(user_id=key).order_by("-publish_time")
+    comment_id_result = byr_comment.objects.filter(user_id=key, user_name=key).order_by("-publish_time")
     comment_id_count = comment_id_result.count()
 
-    # 以user_name为key搜索
     post_name_result = byr_post.objects.filter(user_name=key).order_by("-publish_time")
     post_name_count = post_name_result.count()
     comment_name_result = byr_comment.objects.filter(user_name=key).order_by("-publish_time")
     comment_name_count = comment_name_result.count()
 
+    # 模糊匹配
+    # 以user_id为key搜索
+    post_id_result_fuzzy = byr_post.objects.filter(user_id__istartswith=key).exclude(user_id=key).order_by("-publish_time")
+    post_id_count_fuzzy = post_id_result_fuzzy.count()
+    comment_id_result_fuzzy = byr_comment.objects.filter(user_id__istartswith=key).exclude(user_id=key).order_by("-publish_time")
+    comment_id_count_fuzzy = comment_id_result_fuzzy.count()
+
+    # 以user_name为key搜索
+    post_name_result_fuzzy = byr_post.objects.filter(user_name__istartswith=key).exclude(user_name=key).order_by("-publish_time")
+    post_name_count_fuzzy = post_name_result_fuzzy.count()
+    comment_name_result_fuzzy = byr_comment.objects.filter(user_name__istartswith=key).exclude(user_name=key).order_by("-publish_time")
+    comment_name_count_fuzzy = comment_name_result_fuzzy.count()
+
+    # 匹配数目
+    search_count_exact = post_id_count + post_name_count + comment_id_count + comment_name_count
+    search_count_fuzzy = post_id_count_fuzzy + post_name_count_fuzzy + comment_id_count_fuzzy + comment_name_count_fuzzy
+    search_count = search_count_exact + search_count_fuzzy
+
+    # 结果总页数
+    page_max = get_page(search_count)
+
+    # 规范page数目
+    if page <= 0:
+        page = 1
+    elif page > page_max:
+        page = page_max
+
+    # 搜索结果
     result = []
+    # 精确匹配结果
     for post in post_id_result:
         result.append(post)
     for comment in comment_id_result:
@@ -54,46 +81,24 @@ def search(request):
         result.append(comment)
     result = sorted(result, key=lambda i: i.publish_time, reverse=True)
 
-    # 模糊匹配
-    # 以user_id为key搜索
-    post_id_result_fuzzy = byr_post.objects.filter(user_id__icontains=key).order_by("-publish_time")
-    post_id_count_fuzzy = post_id_result_fuzzy.count()
-    comment_id_result_fuzzy = byr_comment.objects.filter(user_id__icontains=key).order_by("-publish_time")
-    comment_id_count_fuzzy = comment_id_result_fuzzy.count()
-
-    # 以user_name为key搜索
-    post_name_result_fuzzy = byr_post.objects.filter(user_name__icontains=key).order_by("-publish_time")
-    post_name_count_fuzzy = post_name_result_fuzzy.count()
-    comment_name_result_fuzzy = byr_comment.objects.filter(user_name__icontains=key).order_by("-publish_time")
-    comment_name_count_fuzzy = comment_name_result_fuzzy.count()
-
-    for post in post_id_result_fuzzy:
-        result.append(post)
-    for comment in comment_id_result_fuzzy:
-        result.append(comment)
-
-    for post in post_name_result_fuzzy:
-        result.append(post)
-    for comment in comment_name_result_fuzzy:
-        result.append(comment)
-
-    # 匹配数目
-    search_count = post_id_count + post_name_count + comment_id_count + comment_name_count
-    search_count = search_count + post_id_count_fuzzy + post_name_count_fuzzy + comment_id_count_fuzzy + comment_name_count_fuzzy
-    if search_count % 10:
-        page_max = search_count / 10 + 1
-    else:
-        page_max = search_count / 10
+    # # 模糊匹配结果
+    # for post in post_id_result_fuzzy:
+    #     result.append(post)
+    # for comment in comment_id_result_fuzzy:
+    #     result.append(comment)
+    #
+    # for post in post_name_result_fuzzy:
+    #     result.append(post)
+    # for comment in comment_name_result_fuzzy:
+    #     result.append(comment)
 
     if page <= 0:
-        page = 1
         search_result = result[:10]
     elif page == 1:
         search_result = result[:10]
     elif page <= page_max:
         search_result = result[(page-1)*10:page*10]
     else:
-        page = page_max
         search_result = result[(page_max-1)*10:]
 
     end_time = time.time()
@@ -134,3 +139,11 @@ def user(request):
             return HttpResponse('查无此人')
 
     return render(request, 'byrbbs/userInfo.html', {'user_info': user_info, 'user_id': user_id})
+
+
+# 获取页数
+def get_page(count):
+    if count % 10:
+        return count / 10 + 1
+    else:
+        return count / 10
