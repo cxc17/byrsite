@@ -18,6 +18,7 @@ def index(request):
 
 
 def search(request):
+    # 搜索开始时间
     start_time = time.time()
 
     # 获取参数
@@ -37,17 +38,17 @@ def search(request):
     comment_count = comment_result.count()
 
     # 模糊匹配
-    # post_result_fuzzy = byr_post.objects.filter(Q(user_id__istartswith=key) | Q(user_name__istartswith=key))\
-    #     .exclude(Q(user_id=key) | Q(user_name=key)).order_by("-publish_time")
-    # post_count_fuzzy = post_result_fuzzy.count()
-    # comment_result_fuzzy = byr_comment.objects.filter(Q(user_id__istartswith=key) | Q(user_name__istartswith=key))\
-    #     .exclude(Q(user_id=key) | Q(user_name=key)).order_by("-publish_time")
-    # comment_count_fuzzy = comment_result_fuzzy.count()
+    post_result_fuzzy = byr_post.objects.filter((Q(user_id__istartswith=key) | Q(user_name__istartswith=key)),
+                                                ~Q(user_id=key), ~Q(user_name=key)).order_by("-publish_time")
+    post_count_fuzzy = post_result_fuzzy.count()
+    comment_result_fuzzy = byr_comment.objects.filter((Q(user_id__istartswith=key) | Q(user_name__istartswith=key)),
+                                                      ~Q(user_id=key), ~Q(user_name=key)).order_by("-publish_time")
+    comment_count_fuzzy = comment_result_fuzzy.count()
 
     # 匹配数目
     search_count_exact = post_count + comment_count
-    # search_count_fuzzy = post_count_fuzzy + comment_count_fuzzy
-    search_count = search_count_exact #+ search_count_fuzzy
+    search_count_fuzzy = post_count_fuzzy + comment_count_fuzzy
+    search_count = search_count_exact + search_count_fuzzy
 
     # 结果总页数
     page_max = get_page(search_count)
@@ -58,31 +59,54 @@ def search(request):
     elif page > page_max:
         page = page_max
 
-    # 搜索结果
-    result = []
     # 精确匹配结果
+    result_exact = []
     for post in post_result:
-        result.append(post)
+        result_exact.append(post)
     for comment in comment_result:
-        result.append(comment)
+        result_exact.append(comment)
+    result_exact = sorted(result_exact, key=lambda i: i.publish_time, reverse=True)
 
-    result = sorted(result, key=lambda i: i.publish_time, reverse=True)
-
-    # # 模糊匹配结果
-    # for post in post_result_fuzzy:
-    #     result.append(post)
-    # for comment in comment_result_fuzzy:
-    #     result.append(comment)
-
-    if page <= 0:
-        search_result = result[:10]
-    elif page == 1:
-        search_result = result[:10]
-    elif page <= page_max:
-        search_result = result[(page-1)*10:page*10]
+    # 获取搜索页面的结果
+    result_page_exact = get_page(search_count_exact)
+    if page < result_page_exact:
+        search_result = result_exact[(page-1)*10: page*10]
+    elif page == result_page_exact:
+        search_result = result_exact[(page-1)*10:]
+        if len(search_result) < 10:
+            for post in post_result_fuzzy:
+                if len(search_result) < 10:
+                    search_result.append(post)
+                else:
+                    break
+        if len(search_result) < 10:
+            for comment in comment_result_fuzzy:
+                if len(search_result) < 10:
+                    search_result.append(comment)
+                else:
+                    break
     else:
-        search_result = result[(page_max-1)*10:]
+        if search_count_exact % 10 == 0:
+            pass_count = (page - result_page_exact - 1) * 10
+        else:
+            pass_count = (page - result_page_exact) * 10 - search_count_exact % 10
+        if pass_count <= post_count_fuzzy:
+            search_result = post_result_fuzzy[pass_count: pass_count+10]
+            if len(search_result) < 10:
+                result = []
+                for i in search_result:
+                    result.append(i)
+                search_result = result
+                for comment in comment_result_fuzzy:
+                    if len(search_result) < 10:
+                        search_result.append(comment)
+                    else:
+                        break
+        else:
+            pass_count = pass_count - post_count_fuzzy
+            search_result = comment_result_fuzzy[pass_count: pass_count+10]
 
+    # 搜索结束时间
     end_time = time.time()
     search_time = end_time - start_time
 

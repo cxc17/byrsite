@@ -21,7 +21,7 @@ def page_list_pre(page):
 @register.filter
 def page_list_next(page, page_max):
     page = int(page)
-    if page_max - page <= 5:
+    if page_max - page < 5:
         return range(page+1, page_max+1)
     else:
         return range(page+1, page+5)
