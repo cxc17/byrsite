@@ -2,6 +2,7 @@
 
 from django.shortcuts import render
 from django.http import HttpResponse
+from django.db.models import Q
 import time
 import urllib2
 import json
@@ -30,33 +31,23 @@ def search(request):
         page = 1
 
     # 精确匹配
-    post_id_result = byr_post.objects.filter(user_id=key, user_name=key).order_by("-publish_time")
-    post_id_count = post_id_result.count()
-    comment_id_result = byr_comment.objects.filter(user_id=key, user_name=key).order_by("-publish_time")
-    comment_id_count = comment_id_result.count()
-
-    post_name_result = byr_post.objects.filter(user_name=key).order_by("-publish_time")
-    post_name_count = post_name_result.count()
-    comment_name_result = byr_comment.objects.filter(user_name=key).order_by("-publish_time")
-    comment_name_count = comment_name_result.count()
+    post_result = byr_post.objects.filter(Q(user_id=key) | Q(user_name=key)).order_by("-publish_time")
+    post_count = post_result.count()
+    comment_result = byr_comment.objects.filter(Q(user_id=key) | Q(user_name=key)).order_by("-publish_time")
+    comment_count = comment_result.count()
 
     # 模糊匹配
-    # 以user_id为key搜索
-    post_id_result_fuzzy = byr_post.objects.filter(user_id__istartswith=key).exclude(user_id=key).order_by("-publish_time")
-    post_id_count_fuzzy = post_id_result_fuzzy.count()
-    comment_id_result_fuzzy = byr_comment.objects.filter(user_id__istartswith=key).exclude(user_id=key).order_by("-publish_time")
-    comment_id_count_fuzzy = comment_id_result_fuzzy.count()
-
-    # 以user_name为key搜索
-    post_name_result_fuzzy = byr_post.objects.filter(user_name__istartswith=key).exclude(user_name=key).order_by("-publish_time")
-    post_name_count_fuzzy = post_name_result_fuzzy.count()
-    comment_name_result_fuzzy = byr_comment.objects.filter(user_name__istartswith=key).exclude(user_name=key).order_by("-publish_time")
-    comment_name_count_fuzzy = comment_name_result_fuzzy.count()
+    # post_result_fuzzy = byr_post.objects.filter(Q(user_id__istartswith=key) | Q(user_name__istartswith=key))\
+    #     .exclude(Q(user_id=key) | Q(user_name=key)).order_by("-publish_time")
+    # post_count_fuzzy = post_result_fuzzy.count()
+    # comment_result_fuzzy = byr_comment.objects.filter(Q(user_id__istartswith=key) | Q(user_name__istartswith=key))\
+    #     .exclude(Q(user_id=key) | Q(user_name=key)).order_by("-publish_time")
+    # comment_count_fuzzy = comment_result_fuzzy.count()
 
     # 匹配数目
-    search_count_exact = post_id_count + post_name_count + comment_id_count + comment_name_count
-    search_count_fuzzy = post_id_count_fuzzy + post_name_count_fuzzy + comment_id_count_fuzzy + comment_name_count_fuzzy
-    search_count = search_count_exact + search_count_fuzzy
+    search_count_exact = post_count + comment_count
+    # search_count_fuzzy = post_count_fuzzy + comment_count_fuzzy
+    search_count = search_count_exact #+ search_count_fuzzy
 
     # 结果总页数
     page_max = get_page(search_count)
@@ -70,26 +61,17 @@ def search(request):
     # 搜索结果
     result = []
     # 精确匹配结果
-    for post in post_id_result:
+    for post in post_result:
         result.append(post)
-    for comment in comment_id_result:
+    for comment in comment_result:
         result.append(comment)
 
-    for post in post_name_result:
-        result.append(post)
-    for comment in comment_name_result:
-        result.append(comment)
     result = sorted(result, key=lambda i: i.publish_time, reverse=True)
 
     # # 模糊匹配结果
-    # for post in post_id_result_fuzzy:
+    # for post in post_result_fuzzy:
     #     result.append(post)
-    # for comment in comment_id_result_fuzzy:
-    #     result.append(comment)
-    #
-    # for post in post_name_result_fuzzy:
-    #     result.append(post)
-    # for comment in comment_name_result_fuzzy:
+    # for comment in comment_result_fuzzy:
     #     result.append(comment)
 
     if page <= 0:
