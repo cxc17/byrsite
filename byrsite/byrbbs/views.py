@@ -37,12 +37,20 @@ def search(request):
     comment_result = byr_comment.objects.filter(Q(user_id=key) | Q(user_name=key)).order_by("-publish_time")
     comment_count = comment_result.count()
 
+
+    end_time = time.time()
+    search_time = end_time - start_time
+    print search_time
+
     # 精确匹配结果
     result_exact = []
-    for post in post_result:
-        result_exact.append(post)
-    for comment in comment_result:
-        result_exact.append(comment)
+    result_exact.extend(post_result)
+    result_exact.extend(comment_result)
+
+    end_time = time.time()
+    search_time = end_time - start_time
+    print search_time
+
     result_exact = sorted(result_exact, key=lambda i: i.publish_time, reverse=True)
 
     # 模糊匹配数目
