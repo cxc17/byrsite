@@ -31,33 +31,30 @@ def search(request):
     else:
         page = 1
 
+    # 规范page数目
+    if page <= 0:
+        page = 1
+
     # 精确匹配
     post_result = byr_post.objects.filter(Q(user_id=key) | Q(user_name=key)).order_by("-publish_time")
     post_count = post_result.count()
     comment_result = byr_comment.objects.filter(Q(user_id=key) | Q(user_name=key)).order_by("-publish_time")
     comment_count = comment_result.count()
 
-
-    end_time = time.time()
-    search_time = end_time - start_time
-    print search_time
-
     # 精确匹配结果
     result_exact = []
     result_exact.extend(post_result)
     result_exact.extend(comment_result)
-
-    end_time = time.time()
-    search_time = end_time - start_time
-    print search_time
-
     result_exact = sorted(result_exact, key=lambda i: i.publish_time, reverse=True)
 
     # 模糊匹配数目
-    post_count_fuzzy = byr_post.objects.raw("SELECT id, COUNT(id) as post_count from `post` WHERE user_id like %s or "
-                                            "user_name like %s ", [key+'_%', key+'_%'])[0].post_count
-    comment_count_fuzzy = byr_comment.objects.raw("SELECT id, COUNT(id) as comment_count from `comment` WHERE user_id "
-                                                  "like %s or user_name like %s", [key+'_%', key+'_%'])[0].comment_count
+    post_count_fuzzy = sum(i.post_num for i in byr_post.objects.raw("SELECT id, post_num from `user` where (user_id "
+                                                                    "like %s or user_name like %s) and post_num > 0  "
+                                                                    "order by user_id", [key+'_%', key+'_%']))
+    comment_count_fuzzy = sum(i.comment_num for i in byr_comment.objects.raw("SELECT id, comment_num from `user` "
+                                                                             "where user_id like %s or user_name like "
+                                                                             "%s and comment_num > 0 order by user_id",
+                                                                             [key+'_%', key+'_%']))
     # 匹配数目
     search_count_exact = post_count + comment_count
     search_count_fuzzy = post_count_fuzzy + comment_count_fuzzy
@@ -65,37 +62,35 @@ def search(request):
     # 结果总页数
     page_max = get_page(search_count)
 
+
+
+    # 精确匹配页数
+    result_page_exact = get_page(search_count_exact)
+
+    # 当搜索页面在精确查找之内
+    if page < result_page_exact:
+        search_result = result_exact[(page-1)*10: page*10]
+
+
+        # 搜索结束时间
+        end_time = time.time()
+        search_time = end_time - start_time
+        return render(request, 'byrbbs/search.html', {"key": key, "page": page, "search_time": search_time,
+                                                      "search_result": search_result, "page_max": page_max,
+                                                      "search_count": search_count})
+
     # 规范page数目
-    if page <= 0:
-        page = 1
-    elif page > page_max:
+    if page > page_max:
         page = page_max
 
 
-
-
-
-    # 模糊匹配.raw('SELECT * FROM myapp_person')
-    # post_result_fuzzy = byr_post.objects.filter((Q(user_id__istartswith=key) | Q(user_name__istartswith=key)),
-    #                                             ~Q(user_id=key), ~Q(user_name=key)).order_by("-publish_time")
-    # post_count_fuzzy = post_result_fuzzy.count()
-    # comment_result_fuzzy = byr_comment.objects.filter((Q(user_id__istartswith=key) | Q(user_name__istartswith=key)),
-    #                                                   ~Q(user_id=key), ~Q(user_name=key)).order_by("-publish_time")
-    # comment_count_fuzzy = comment_result_fuzzy.count()
+    # 模糊匹配
     post_result_fuzzy = byr_post.objects.raw("SELECT * from `post` WHERE user_id like %s or user_name "
                                              "like %s order by `publish_time` desc", [key+'_%', key+'_%'])
     comment_result_fuzzy = byr_comment.objects.raw("SELECT * from `comment` WHERE user_id like %s or user_name "
                                                    "like %s order by `publish_time` desc", [key+'_%', key+'_%'])
 
-
-
-
-
-    # 获取搜索页面的结果
-    result_page_exact = get_page(search_count_exact)
-    if page < result_page_exact:
-        search_result = result_exact[(page-1)*10: page*10]
-    elif page == result_page_exact:
+    if page == result_page_exact:
         search_result = result_exact[(page-1)*10:]
         if len(search_result) < 10:
             for post in post_result_fuzzy:
@@ -130,10 +125,18 @@ def search(request):
             pass_count = pass_count - post_count_fuzzy
             search_result = comment_result_fuzzy[pass_count: pass_count+10]
 
+
+
+
+
+
+
+
+
+
     # 搜索结束时间
     end_time = time.time()
     search_time = end_time - start_time
-    print search_time
 
     return render(request, 'byrbbs/search.html', {"key": key, "page": page, "search_time": search_time,
                                                   "search_result": search_result, "page_max": page_max,
