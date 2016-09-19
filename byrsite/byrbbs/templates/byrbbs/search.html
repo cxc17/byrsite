@@ -26,49 +26,50 @@
     </script>
 
     <body>
-        <div id="header">
-            <div class="header-brand">
-                <a href="/byrbbs">
-                <img src="{% static 'byrbbs/images/logo.png' %}"  width="100" height="28">
-                </a></div>
-            <div class="header-search">
-                <form id="form" method="GET" action="/byrbbs/">
-                    <input type="text" id="bbssearch" name="key" maxlength="40" value="{{ key }}">
-                    <button type="submit" id="search-button" class="search-button">搜 索</button></form>
-            </div>
-            <div id="header-navigation">
-                <a href="/byrbbs/?key={{ key }}">网页</a>
-                <a href="/byrbbs/?key={{ key }}">用户</a>
+        <div style="position: relative; min-height:100%; ">
 
-
-                <div class="btn-group">
-                    <div class="asd" style="cursor: pointer;:hover{ color:#666262; }" id="menu1" data-toggle="dropdown">时间不限<span class="caret"></span></div>
-                    <ul class="dropdown-menu">
-                        <li>
-                             <a href="#">操作</a>
-                        </li>
-                        <li class="disabled">
-                             <a href="#">另一操作</a>
-                        </li>
-                        <li class="divider">
-                        </li>
-                        <li>
-                             <a href="#">其它</a>
-                        </li>
-                    </ul>
-                </div>
-
-
-
-            </div>
-        </div>
+{#        <div id="header">#}
+{#            <div class="header-brand">#}
+{#                <a href="/byrbbs">#}
+{#                <img src="{% static 'byrbbs/images/logo.png' %}"  width="100" height="28">#}
+{#                </a>#}
+{#            </div>#}
+{#            <div class="header-search">#}
+{#                <form id="form" method="GET" action="/byrbbs/">#}
+{#                    <input type="text" id="bbssearch" name="key" maxlength="40" value="{{ key }}">#}
+{#                    <button type="submit" id="search-button" class="search-button">搜 索</button></form>#}
+{#            </div>#}
+{#            <div id="header-navigation">#}
+{#                <a href="/byrbbs/?key={{ key }}">网页</a>#}
+{#                <a href="/byrbbs/?key={{ key }}">用户</a>#}
+{##}
+{##}
+{#                <div class="btn-group">#}
+{#                    <div class="time_menu" id="menu1" data-toggle="dropdown">时间不限<span class="caret"></span></div>#}
+{#                    <ul class="dropdown-menu">#}
+{#                        <li>#}
+{#                             <a href="#">操作</a>#}
+{#                        </li>#}
+{#                        <li class="disabled">#}
+{#                             <a href="#">另一操作</a>#}
+{#                        </li>#}
+{#                        <li class="divider">#}
+{#                        </li>#}
+{#                        <li>#}
+{#                             <a href="#">其它</a>#}
+{#                        </li>#}
+{#                    </ul>#}
+{#                </div>#}
+{##}
+{#            </div>#}
+{#        </div>#}
 
 
         <div class="container">
 {#            <div class="declare">#}
 {#                <div class="list-declare box">本站是一个bbs内容搜索引擎，从byrbbs抓取数据，用于学习，分析和研究。内容是本站根据您的指令自动搜索的结果，不代表本站赞成资源的内容或立场，文章的版权归论坛和文章作者所有。</div>#}
 {#            </div>#}
-            <br/>
+            <br/><br/>
             <div class="list-container">
                 <div class="list box">
                     <p id="list-info">
@@ -83,14 +84,11 @@
                     <div class="list box">
                         <p style="padding-top:.33em"> 抱歉，没有找到和您查询的"<b>{{ key }}</b>"相符的内容。</p>
                         <p style="margin-top:1em">建议：
-                        <ul >
+                        <ul>
                             <li>请检查输入字词有无错误。</li>
                             <li>请尝试其他查询词。</li>
                             <li>请改用较常见的字词。</li>
                         </ul>
-                    <br/><br/><br/><br/><br/><br/><br/><br/>
-                    <br/><br/><br/><br/><br/><br/><br/><br/>
-                    <br/><br/><br/><br/><br/><br/><br/>
                     </div>
                 {% endif %}
 
@@ -151,11 +149,10 @@
             </div>
         </div>
 
-        <div class="row">
-            <div id="footer-2">
-                <h5>Copyright © 2016 BUPT::Cxc_17 &nbsp;|
-                    <a href="mailto: caixiaochuan@sina.cn">&nbsp;联系我们</a></h5>
-            </div>
+        <div id="footer-2">
+            <h5>Copyright © 2016 BUPT::Cxc_17 &nbsp;|
+                <a href="mailto: caixiaochuan@sina.cn">&nbsp;联系我们</a>
+            </h5>
         </div>
 
         {# 用户信息模态框 #}
@@ -216,5 +213,6 @@
             </div><!-- /.modal -->
         </div>
 
+        </div>
     </body>
 </html>
