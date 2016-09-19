@@ -1,7 +1,7 @@
 # coding: utf-8
 
 from django.shortcuts import render
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from django.db.models import Q
 from collections import defaultdict
 import time
@@ -12,8 +12,11 @@ from models import *
 
 
 def index(request):
-    if "key" in request.GET and request.GET.get("key") != "":
-        return search(request)
+    if "key" in request.GET:
+        if request.GET.get("key").strip() != "":
+            return search(request)
+        else:
+            return HttpResponseRedirect('/byrbbs')
 
     return render(request, 'byrbbs/index.html')
 
@@ -80,14 +83,7 @@ def search(request):
                                                       "search_result": search_result, "page_max": page_max,
                                                       "search_count": search_count})
 
-
-
-    # 模糊匹配
-    post_result_fuzzy = byr_post.objects.raw("SELECT * from `post` WHERE user_id like %s or user_name "
-                                             "like %s order by `publish_time` desc", [key+'_%', key+'_%'])
-    comment_result_fuzzy = byr_comment.objects.raw("SELECT * from `comment` WHERE user_id like %s or user_name "
-                                                   "like %s order by `publish_time` desc", [key+'_%', key+'_%'])
-
+    # 当搜索页面为精确查找页数
     if page == result_page_exact:
         # 精确匹配结果
         result_exact = []
@@ -118,7 +114,7 @@ def search(request):
         comment_sql = defaultdict(int)
         if search_result_count < 10:
             for comment in comment_count_fuzzy_tmp:
-                for i in xrange(0, comment.post_num):
+                for i in xrange(0, comment.comment_num):
                     if search_result_count < 10:
                         comment_sql[comment.user_id] += 1
                         search_result_count += 1
@@ -129,35 +125,75 @@ def search(request):
             for k, v in comment_sql.items():
                 fuzzy_comment_result = byr_comment.objects.filter(user_id=k).order_by("-publish_time")
                 search_result.extend(fuzzy_comment_result[:v])
+    # 当搜索页面在精确查找之外
     else:
         if search_count_exact % 10 == 0:
             pass_count = (page - result_page_exact - 1) * 10
         else:
             pass_count = (page - result_page_exact) * 10 - search_count_exact % 10
+
         if pass_count <= post_count_fuzzy:
-            search_result = post_result_fuzzy[pass_count: pass_count+10]
-            if len(search_result) < 10:
-                result = []
-                for i in search_result:
-                    result.append(i)
-                search_result = result
-                for comment in comment_result_fuzzy:
-                    if len(search_result) < 10:
-                        search_result.append(comment)
+            search_result_count = 0
+            # post模糊匹配
+            post_sql = defaultdict(int)
+            for post in post_count_fuzzy_tmp:
+                start = 0
+                for i in xrange(0, post.post_num):
+                    if pass_count > 0:
+                        start += 1
+                        pass_count -= 1
+                    elif search_result_count < 10:
+                        post_sql[(post.user_id, start)] += 1
+                        search_result_count += 1
                     else:
                         break
+                if search_result_count == 10:
+                    break
+
+            search_result = []
+            for k, v in post_sql.items():
+                fuzzy_post_result = byr_post.objects.filter(user_id=k[0]).order_by("-publish_time")
+                search_result.extend(fuzzy_post_result[k[1]:k[1]+v])
+
+            # comment模糊匹配
+            comment_sql = defaultdict(int)
+            if search_result_count < 10:
+                for comment in comment_count_fuzzy_tmp:
+                    for i in xrange(0, comment.comment_num):
+                        if search_result_count < 10:
+                            comment_sql[comment.user_id] += 1
+                            search_result_count += 1
+                        else:
+                            break
+                    if search_result_count == 10:
+                        break
+                for k, v in comment_sql.items():
+                    fuzzy_comment_result = byr_comment.objects.filter(user_id=k).order_by("-publish_time")
+                    search_result.extend(fuzzy_comment_result[:v])
         else:
             pass_count = pass_count - post_count_fuzzy
-            search_result = comment_result_fuzzy[pass_count: pass_count+10]
 
+            search_result_count = 0
+            # post模糊匹配
+            comment_sql = defaultdict(int)
+            for comment in comment_count_fuzzy_tmp:
+                start = 0
+                for i in xrange(0, comment.comment_num):
+                    if pass_count > 0:
+                        start += 1
+                        pass_count -= 1
+                    elif search_result_count < 10:
+                        comment_sql[(comment.user_id, start)] += 1
+                        search_result_count += 1
+                    else:
+                        break
+                if search_result_count == 10:
+                    break
 
-
-
-
-
-
-
-
+            search_result = []
+            for k, v in comment_sql.items():
+                fuzzy_comment_result = byr_comment.objects.filter(user_id=k[0]).order_by("-publish_time")
+                search_result.extend(fuzzy_comment_result[k[1]:k[1]+v])
 
     # 搜索结束时间
     end_time = time.time()

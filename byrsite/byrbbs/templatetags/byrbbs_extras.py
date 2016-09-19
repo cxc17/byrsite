@@ -81,3 +81,15 @@ def image_length(length):
         return 140
     else:
         return length
+
+
+# 对搜索结果数目进行处理
+@register.filter
+def search_count(search_count):
+    if search_count < 1000:
+        return search_count
+    elif search_count < 1000000:
+        return str(search_count)[:-3] + ',' + str(search_count)[-3:]
+    else:
+        return str(search_count)[:-6] + ',' + str(search_count)[-6:-3] + ',' + str(search_count)[-3:]
+
