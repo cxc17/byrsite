@@ -80,8 +80,8 @@ DATABASES = {
         # 'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'byr',
-        'HOST': '127.0.0.1',
-        # 'HOST': '192.168.1.98',
+        # 'HOST': '127.0.0.1',
+        'HOST': '192.168.1.98',
         'USER': 'root',
         'PASSWORD': '123456',
     }
@@ -118,7 +118,7 @@ USE_I18N = True
 
 USE_L10N = True
 
-USE_TZ = True
+USE_TZ = False
 
 
 # Static files (CSS, JavaScript, Images)

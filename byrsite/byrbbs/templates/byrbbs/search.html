@@ -23,53 +23,67 @@
                 $(this).removeData("bs.modal");
             });
         });
+
+        $(function() {
+            //阻止点击label由于事件传递的原因收起菜单
+            $(".dropdown-menu").on("click", "[data-stopPropagation]", function(e) {
+                e.stopPropagation();
+            });
+        });
     </script>
 
     <body>
         <div style="position: relative; min-height:100%; ">
+        <div id="header">
+            <div class="header-brand">
+                <a href="/byrbbs">
+                <img src="{% static 'byrbbs/images/logo.png' %}"  width="100" height="28">
+                </a>
+                <form id="form" method="GET" action="/byrbbs/">
+                    <input class="header-search" type="text" id="bbssearch" name="key" maxlength="40" value="{{ key }}">
+                    <button type="submit" id="search-button" class="search-button">搜 索</button>
+                </form>
+            </div>
 
-{#        <div id="header">#}
-{#            <div class="header-brand">#}
-{#                <a href="/byrbbs">#}
-{#                <img src="{% static 'byrbbs/images/logo.png' %}"  width="100" height="28">#}
-{#                </a>#}
-{#            </div>#}
-{#            <div class="header-search">#}
-{#                <form id="form" method="GET" action="/byrbbs/">#}
-{#                    <input type="text" id="bbssearch" name="key" maxlength="40" value="{{ key }}">#}
-{#                    <button type="submit" id="search-button" class="search-button">搜 索</button></form>#}
-{#            </div>#}
-{#            <div id="header-navigation">#}
-{#                <a href="/byrbbs/?key={{ key }}">网页</a>#}
-{#                <a href="/byrbbs/?key={{ key }}">用户</a>#}
-{##}
-{##}
-{#                <div class="btn-group">#}
-{#                    <div class="time_menu" id="menu1" data-toggle="dropdown">时间不限<span class="caret"></span></div>#}
-{#                    <ul class="dropdown-menu">#}
-{#                        <li>#}
-{#                             <a href="#">操作</a>#}
-{#                        </li>#}
-{#                        <li class="disabled">#}
-{#                             <a href="#">另一操作</a>#}
-{#                        </li>#}
-{#                        <li class="divider">#}
-{#                        </li>#}
-{#                        <li>#}
-{#                             <a href="#">其它</a>#}
-{#                        </li>#}
-{#                    </ul>#}
-{#                </div>#}
-{##}
-{#            </div>#}
-{#        </div>#}
+            <div id="header-navigation">
+                <div class="{{ type|menu_type:"all" }}"><a href="/byrbbs/?key={{ key }}&type=all">全部</a></div>
+                <div class="{{ type|menu_type:"user" }}"><a href="/byrbbs/?key={{ key }}&type=user">用户</a></div>
+                <div class="{{ type|menu_type:"data" }}"><a href="/byrbbs/?key={{ key }}&type=data">大数据</a></div>
+
+                <div class="btn-group">
+                    <div id="menu1" data-toggle="dropdown">时间不限<span class="caret"></span></div>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a href="/byrbbs/?key={{ key }}&time=all">时间不限</a>
+                        </li>
+                        <li>
+                            <a href="/byrbbs/?key={{ key }}&time=1">一天内</a>
+                        </li>
+                        <li>
+                            <a href="/byrbbs/?key={{ key }}&time=1">一周内</a>
+                        </li>
+                        <li>
+                            <a href="/byrbbs/?key={{ key }}&time=1">一月内</a>
+                        </li>
+                        <li>
+                            <a href="/byrbbs/?key={{ key }}&time=1">一年内</a>
+                        </li>
+                        <li class="divider">
+                        </li>
+                        <div data-stopPropagation="true" style="font-size: small; height: 50px">
+                            <p style="position: absolute;top: 120px;left: 20px">自定义
+                            从<input data-stopPropagation="true" type="date" autocomplete="off" class="c-tip-custom-input c-tip-custom-input-focus"></p>
+{#                            <span style="position: absolute;top: 120px;left: 20px">#}
+{#                            从<input data-stopPropagation="true" type="date" autocomplete="off" class="c-tip-custom-input c-tip-custom-input-focus"></span>#}
+                        </div>
+                    </ul>
+                </div>
+            </div>
+
+        </div>
 
 
         <div class="container">
-{#            <div class="declare">#}
-{#                <div class="list-declare box">本站是一个bbs内容搜索引擎，从byrbbs抓取数据，用于学习，分析和研究。内容是本站根据您的指令自动搜索的结果，不代表本站赞成资源的内容或立场，文章的版权归论坛和文章作者所有。</div>#}
-{#            </div>#}
-            <br/><br/>
             <div class="list-container">
                 <div class="list box">
                     <p id="list-info">
@@ -95,9 +109,7 @@
                 {% for result in search_result %}
                     <div class="list box">
                         <h4>
-                            <a href={{ result.url }} target="_blank">
-                                {{ result.title}}
-                            </a>
+                            <a href={{ result.url }} target="_blank">{{ result.title}}</a>
                         </h4>
                         <br/>
                         <div>
@@ -156,59 +168,11 @@
         </div>
 
         {# 用户信息模态框 #}
-        <div class="modal fade" id="UserModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal fade" id="UserModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" >
             <div class="modal-dialog">
                 <div class="modal-content">
-{#                    <div class="modal-header">#}
-{#                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">#}
-{#                            &times;#}
-{#                        </button>#}
-{#                        <h5 class="modal-title" id="myModalLabel">#}
-{#                            用户信息#}
-{#                        </h5>#}
-{#                    </div>#}
-{#	                <div class="row clearfix">#}
-{#                        <div style="padding-left: 3%">#}
-{#                            <span style="color: #5384DA;line-height: 50px">one</span> 发问候信 | 加为好友#}
-{#                            <br/>#}
-{#                            <span style="color: #5384DA;">基本信息</span>#}
-{#                        </div>#}
-{#                        <HR  width="94%" color=#987cb9 style="padding-top: 0px">#}
-{#                        <div class="col-md-3 column">#}
-{#                            <img alt="150x150" src="https://static.byr.cn/uploadFace/B/btx.929.jpg" />#}
-{#                            <span style="color: #5384DA;line-height: 50px">论坛属性</span>#}
-{#                        </div>#}
-{#                        <div class="col-md-9 column">#}
-{#                            <dl style="font-size: 15px">#}
-{#                                <dt>#}
-{#                                    昵 称:&nbsp;&nbsp;description#}
-{#                                </dt>#}
-{#                                <dt>#}
-{#                                    性 别:&nbsp;&nbsp;dsadescription#}
-{#                                </dt>#}
-{#                                <dt>#}
-{#                                    星 座:&nbsp;&nbsp;dsadescription#}
-{#                                </dt>#}
-{#                                <dt>#}
-{#                                    &nbsp;&nbsp;QQ:&nbsp;&nbsp;dsadescription#}
-{#                                </dt>#}
-{#                                <dt>#}
-{#                                     MSN:&nbsp;&nbsp;dsadescription#}
-{#                                </dt>#}
-{#                                <dt>#}
-{#                                    主 页:&nbsp;&nbsp;dsadescription#}
-{#                                </dt>#}
-{#                            </dl>#}
-{#                        </div>#}
-{##}
-{#                        <HR  width="94%" color=#987cb9 style="padding-top: 0px">#}
-{##}
-{#                    </div>#}
-{##}
-{#                    <div class="modal-footer">#}
-{#                        <button type="button" class="btn btn-default" data-dismiss="modal">关闭#}
-{#                        </button>#}
-{#                    </div>#}
+
+
                 </div><!-- /.modal-content -->
             </div><!-- /.modal -->
         </div>

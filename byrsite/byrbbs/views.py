@@ -35,6 +35,13 @@ def search(request):
     else:
         page = 1
 
+    try:
+        web_type = request.GET.get("type")
+    except:
+        web_type = "all"
+    if web_type not in ['all', 'user', 'data']:
+        web_type = "all"
+
     # 精确匹配数目
     post_result = byr_post.objects.filter(Q(user_id=key) | Q(user_name=key)).order_by("-publish_time")
     post_count = post_result.count()
@@ -81,7 +88,7 @@ def search(request):
         search_time = end_time - start_time
         return render(request, 'byrbbs/search.html', {"key": key, "page": page, "search_time": search_time,
                                                       "search_result": search_result, "page_max": page_max,
-                                                      "search_count": search_count})
+                                                      "search_count": search_count, "type": web_type})
 
     # 当搜索页面为精确查找页数
     if page == result_page_exact:
@@ -201,7 +208,7 @@ def search(request):
 
     return render(request, 'byrbbs/search.html', {"key": key, "page": page, "search_time": search_time,
                                                   "search_result": search_result, "page_max": page_max,
-                                                  "search_count": search_count})
+                                                  "search_count": search_count, "type": web_type})
 
 
 def user(request):

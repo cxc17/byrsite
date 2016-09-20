@@ -93,3 +93,11 @@ def search_count(search_count):
     else:
         return str(search_count)[:-6] + ',' + str(search_count)[-6:-3] + ',' + str(search_count)[-3:]
 
+
+# 对搜索结果数目进行处理
+@register.filter
+def menu_type(menu_type, now_type):
+    if menu_type == now_type:
+        return "menu_total_active"
+    else:
+        return "menu_total"
