@@ -282,21 +282,19 @@ b{
 
 
 
-.c-tip-custom-input, .c-tip-si-input {
+.c-tip-custom-input{
     display: inline-block;
     font-size: 11px;
     color: #333;
     margin-left: 4px;
     padding: 0 2px;
-    width: 74%;
+    width: 110px;
     height: 16px;
-    line-height: 16px\9;
+    line-height: 16px;
     border: 1px solid #ebebeb;
     outline: 0;
     box-sizing: content-box;
     -webkit-box-sizing: content-box;
     -moz-box-sizing: content-box;
     overflow: hidden;
-    position: relative;
-	top: 0px;
 }
