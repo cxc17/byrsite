@@ -14,6 +14,11 @@
         <link href="http://apps.bdimg.com/libs/bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet" />
         <script src="http://apps.bdimg.com/libs/jquery/2.1.1/jquery.min.js"></script>
 	    <script src="http://apps.bdimg.com/libs/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+
+
+
+		<link rel="stylesheet" href="../../static/byrbbs/rendezvous.css">
+
         <link rel="stylesheet" href="{% static 'byrbbs/search_style.css' %}">
     </head>
 
@@ -33,6 +38,8 @@
     </script>
 
     <body>
+
+
         <div style="position: relative; min-height:100%; ">
         <div id="header">
             <div class="header-brand">
@@ -70,17 +77,22 @@
                         </li>
                         <li class="divider">
                         </li>
-                        <div data-stopPropagation="true" style="font-size: small; line-height: 22PX; padding-top: 20px; color: #777;padding-left: 10px">
-                            <p style="padding-left: 20px; position: absolute; top: 140px;">自定义</p>
-                            从<input name="st" date-min="0" date-max="20160921" type="date" autocomplete="off" value="2016-09-21" data-value="1474387200000" class="c-tip-custom-input">
-                            至<input name="st" date-min="0" date-max="20160921" type="date" autocomplete="off" value="2016-09-21" data-value="1474387200000" class="c-tip-custom-input">
+                        <div data-stopPropagation="true" style="font-size: small; line-height: 22PX; padding-top: 20px; color: #777;padding-left: 20px">
+                            <p style="position: absolute; top: 140px;">自定义</p>
+{#                            从<input name="st" date-min="0" date-max="20160921" type="datetime" autocomplete="off" value="2016-09-21" data-value="1474387200000" class="c-tip-custom-input">#}
+{#                            至<input name="st" date-min="0" date-max="20160921" type="date" autocomplete="off" value="2016-09-21" data-value="1474387200000" class="c-tip-custom-input">#}
+                            <div id="rendez-vous-french"></div>
+                            <script src="../../static/byrbbs/js/jquery.js"></script>
+                            <script src="../../static/byrbbs/js/syntaxhighlighter/shCore.js"></script>
+                            <script src="../../static/byrbbs/js/rendezvous.js"></script>
+                            <script src="../../static/byrbbs/js/app.js"></script>
+                            <button style=" margin-top: 5px;margin-bottom: 5px;">确认</button>
                         </div>
                     </ul>
                 </div>
             </div>
 
         </div>
-
 
         <div class="container">
             <div class="list-container">
