@@ -25,7 +25,7 @@ def search(request):
     # 搜索开始时间
     start_time = time.time()
 
-    # 获取参数
+    # 获取页数参数
     key = request.GET.get("key")
     if "p" in request.GET:
         try:
@@ -34,7 +34,7 @@ def search(request):
             page = 1
     else:
         page = 1
-
+    # 获取类型参数
     try:
         web_type = request.GET.get("type")
     except:
@@ -42,11 +42,33 @@ def search(request):
     if web_type not in ['all', 'user', 'data']:
         web_type = "all"
 
+    # 获取时间参数
+    try:
+        web_time = request.GET.get("time")
+    except:
+        web_time = "all"
+    if web_time not in ['all', '1', '7', '30', '365']:
+        web_time = "all"
+
+    if web_time == 'all':
+        web_strftime = 0
+    else:
+        web_localtime = time.time() - 86400*int(web_time)
+        web_strftime = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(web_localtime))
+
     # 精确匹配数目
-    post_result = byr_post.objects.filter(Q(user_id=key) | Q(user_name=key)).order_by("-publish_time")
-    post_count = post_result.count()
-    comment_result = byr_comment.objects.filter(Q(user_id=key) | Q(user_name=key)).order_by("-publish_time")
-    comment_count = comment_result.count()
+    if web_strftime:
+        post_result = byr_post.objects.raw("SELECT * from (SELECT * from post WHERE user_name=%s or user_id=%s ORDER BY"
+                                           " publish_time desc) c WHERE publish_time > %s", [key, key, web_strftime])
+        post_count = len([i for i in post_result])
+        comment_result = byr_comment.objects.raw("SELECT * from (SELECT * from comment WHERE user_name=%s or user_id=%s"
+                                                 " ORDER BY publish_time desc ) c WHERE publish_time > %s", [key, key, web_strftime])
+        comment_count = len([i for i in comment_result])
+    else:
+        post_result = byr_post.objects.filter(Q(user_id=key) | Q(user_name=key)).order_by("-publish_time")
+        post_count = post_result.count()
+        comment_result = byr_comment.objects.filter(Q(user_id=key) | Q(user_name=key)).order_by("-publish_time")
+        comment_count = comment_result.count()
 
     # 模糊匹配数目
     post_count_fuzzy_tmp = byr_post.objects.raw("SELECT id, user_id, post_num from `user` where (user_id like %s or "
@@ -71,14 +93,14 @@ def search(request):
         page = page_max
 
     # 精确匹配页数
-    result_page_exact = get_page(search_count_exact)
+    result_page_exact, search_result_exact_last = get_page(search_count_exact)
 
     # 当搜索页面在精确查找之内
     if page < result_page_exact:
         # 精确匹配结果
         result_exact = []
-        result_exact.extend(post_result)
-        result_exact.extend(comment_result)
+        result_exact.extend(post_result[:page*10])
+        result_exact.extend(comment_result[:page*10])
         result_exact = sorted(result_exact, key=lambda i: i.publish_time, reverse=True)
 
         search_result = result_exact[(page-1)*10: page*10]
@@ -88,17 +110,17 @@ def search(request):
         search_time = end_time - start_time
         return render(request, 'byrbbs/search.html', {"key": key, "page": page, "search_time": search_time,
                                                       "search_result": search_result, "page_max": page_max,
-                                                      "search_count": search_count, "type": web_type})
-
+                                                      "search_count": search_count, "type": web_type,
+                                                      "time": web_time})
     # 当搜索页面为精确查找页数
     if page == result_page_exact:
         # 精确匹配结果
         result_exact = []
-        result_exact.extend(post_result)
-        result_exact.extend(comment_result)
+        result_exact.extend(post_result[-search_result_exact_last:])
+        result_exact.extend(comment_result[-search_result_exact_last:])
         result_exact = sorted(result_exact, key=lambda i: i.publish_time, reverse=True)
 
-        search_result = result_exact[(page-1)*10:]
+        search_result = result_exact[-search_result_exact_last:]
         search_result_count = len(search_result)
 
         # post模糊匹配
@@ -208,7 +230,8 @@ def search(request):
 
     return render(request, 'byrbbs/search.html', {"key": key, "page": page, "search_time": search_time,
                                                   "search_result": search_result, "page_max": page_max,
-                                                  "search_count": search_count, "type": web_type})
+                                                  "search_count": search_count, "type": web_type,
+                                                  "time": web_time})
 
 
 def user(request):
@@ -246,6 +269,6 @@ def user(request):
 # 获取页数
 def get_page(count):
     if count % 10:
-        return count / 10 + 1
+        return (count / 10 + 1, count % 10)
     else:
-        return count / 10
+        return (count / 10, 0)

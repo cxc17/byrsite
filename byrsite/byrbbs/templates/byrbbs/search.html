@@ -15,8 +15,6 @@
         <script src="http://apps.bdimg.com/libs/jquery/2.1.1/jquery.min.js"></script>
 	    <script src="http://apps.bdimg.com/libs/bootstrap/3.3.4/js/bootstrap.min.js"></script>
 
-
-
 		<link rel="stylesheet" href="../../static/byrbbs/rendezvous.css">
 
         <link rel="stylesheet" href="{% static 'byrbbs/search_style.css' %}">
@@ -38,8 +36,6 @@
     </script>
 
     <body>
-
-
         <div style="position: relative; min-height:100%; ">
         <div id="header">
             <div class="header-brand">
@@ -67,13 +63,13 @@
                             <a href="/byrbbs/?key={{ key }}&time=1">一天内</a>
                         </li>
                         <li>
-                            <a href="/byrbbs/?key={{ key }}&time=1">一周内</a>
+                            <a href="/byrbbs/?key={{ key }}&time=7">一周内</a>
                         </li>
                         <li>
-                            <a href="/byrbbs/?key={{ key }}&time=1">一月内</a>
+                            <a href="/byrbbs/?key={{ key }}&time=30">一月内</a>
                         </li>
                         <li>
-                            <a href="/byrbbs/?key={{ key }}&time=1">一年内</a>
+                            <a href="/byrbbs/?key={{ key }}&time=365">一年内</a>
                         </li>
                         <li class="divider">
                         </li>
@@ -82,7 +78,6 @@
 {#                            从<input name="st" date-min="0" date-max="20160921" type="datetime" autocomplete="off" value="2016-09-21" data-value="1474387200000" class="c-tip-custom-input">#}
 {#                            至<input name="st" date-min="0" date-max="20160921" type="date" autocomplete="off" value="2016-09-21" data-value="1474387200000" class="c-tip-custom-input">#}
                             <div id="rendez-vous-french"></div>
-                            <script src="../../static/byrbbs/js/jquery.js"></script>
                             <script src="../../static/byrbbs/js/syntaxhighlighter/shCore.js"></script>
                             <script src="../../static/byrbbs/js/rendezvous.js"></script>
                             <script src="../../static/byrbbs/js/app.js"></script>
@@ -149,21 +144,21 @@
                 {% if page_max > 1%}
                 <div class="list-pagination" id="page">
                     {% if page > 1%}
-                        <a href="?key={{ key }}&p={{ page|add:"-1" }}" jp-role="last" jp-data="上一页">&lt;上一页</a>
+                        <a href="?key={{ key }}&p={{ page|add:"-1" }}&time={{ time }}" jp-role="last" jp-data="上一页">&lt;上一页</a>
                     {% endif %}
 
                     {% for page_num in page|page_list_pre %}
-                        <a href="?key={{ key }}&p={{ page_num }}" jp-role="page" jp-data={{ page_num }}>{{ page_num }}</a>
+                        <a href="?key={{ key }}&p={{ page_num }}&time={{ time }}" jp-role="page" jp-data={{ page_num }}>{{ page_num }}</a>
                     {% endfor %}
 
-                    <a href="?key={{ key }}&p={{ page }}" jp-role="page" jp-data="1" class="active">{{ page }}</a>
+                    <a href="?key={{ key }}&p={{ page }}&time={{ time }}" jp-role="page" jp-data="1" class="active">{{ page }}</a>
 
                     {% for page_num in page|page_list_next:page_max %}
-                        <a href="?key={{ key }}&p={{ page_num }}" jp-role="page" jp-data={{ page_num }}>{{ page_num }}</a>
+                        <a href="?key={{ key }}&p={{ page_num }}&time={{ time }}" jp-role="page" jp-data={{ page_num }}>{{ page_num }}</a>
                     {% endfor %}
 
                     {% if page < page_max%}
-                        <a href="?key={{ key }}&p={{ page|add:"1" }}" jp-role="last" jp-data="下一页">下一页&gt;</a>
+                        <a href="?key={{ key }}&p={{ page|add:"1" }}&time={{ time }}" jp-role="last" jp-data="下一页">下一页&gt;</a>
                     {% endif %}
                 </div>
                 {% endif %}
