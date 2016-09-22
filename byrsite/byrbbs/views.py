@@ -44,16 +44,16 @@ def search(request):
 
     # 获取时间参数
     try:
-        web_time = request.GET.get("time")
+        web_date = request.GET.get("date")
     except:
-        web_time = "all"
-    if web_time not in ['all', '1', '7', '30', '365']:
-        web_time = "all"
+        web_date = "all"
+    if web_date not in ['all', '1', '7', '30', '365']:
+        web_date = "all"
 
-    if web_time == 'all':
+    if web_date == 'all':
         web_strftime = 0
     else:
-        web_localtime = time.time() - 86400*int(web_time)
+        web_localtime = time.time() - 86400*int(web_date)
         web_strftime = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(web_localtime))
 
     # 精确匹配数目
@@ -84,7 +84,7 @@ def search(request):
     search_count = search_count_exact + search_count_fuzzy
 
     # 结果总页数
-    page_max = get_page(search_count)
+    page_max = get_page(search_count)[0]
 
     # 规范page数目
     if page <= 0:
@@ -111,13 +111,13 @@ def search(request):
         return render(request, 'byrbbs/search.html', {"key": key, "page": page, "search_time": search_time,
                                                       "search_result": search_result, "page_max": page_max,
                                                       "search_count": search_count, "type": web_type,
-                                                      "time": web_time})
+                                                      "date": web_date})
     # 当搜索页面为精确查找页数
     if page == result_page_exact:
         # 精确匹配结果
         result_exact = []
-        result_exact.extend(post_result[-search_result_exact_last:])
-        result_exact.extend(comment_result[-search_result_exact_last:])
+        result_exact.extend(post_result[max(post_count-search_result_exact_last, 0):])
+        result_exact.extend(comment_result[max(comment_count-search_result_exact_last, 0):])
         result_exact = sorted(result_exact, key=lambda i: i.publish_time, reverse=True)
 
         search_result = result_exact[-search_result_exact_last:]
@@ -231,7 +231,7 @@ def search(request):
     return render(request, 'byrbbs/search.html', {"key": key, "page": page, "search_time": search_time,
                                                   "search_result": search_result, "page_max": page_max,
                                                   "search_count": search_count, "type": web_type,
-                                                  "time": web_time})
+                                                  "date": web_date})
 
 
 def user(request):
@@ -269,6 +269,6 @@ def user(request):
 # 获取页数
 def get_page(count):
     if count % 10:
-        return (count / 10 + 1, count % 10)
+        return count / 10 + 1, count % 10
     else:
-        return (count / 10, 0)
+        return count / 10, 0

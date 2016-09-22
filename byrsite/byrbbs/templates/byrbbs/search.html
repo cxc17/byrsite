@@ -51,38 +51,38 @@
             <div id="header-navigation">
                 <div class="{{ type|menu_type:"all" }}"><a href="/byrbbs/?key={{ key }}&type=all">全部</a></div>
                 <div class="{{ type|menu_type:"user" }}"><a href="/byrbbs/?key={{ key }}&type=user">用户</a></div>
-                <div class="{{ type|menu_type:"data" }}"><a href="/byrbbs/?key={{ key }}&type=data">大数据</a></div>
+                <div class="{{ type|menu_type:"data" }}"><a href="/byrbbs/?key={{ key }}&type=data">数据</a></div>
 
                 <div class="btn-group">
-                    <div id="menu1" data-toggle="dropdown">时间不限<span class="caret"></span></div>
+                    <div id="menu1" data-toggle="dropdown">{{ date|date_type }}<span class="caret"></span></div>
                     <ul class="dropdown-menu">
                         <li>
-                            <a href="/byrbbs/?key={{ key }}&time=all">时间不限</a>
+                            <a href="/byrbbs/?key={{ key }}&date=all">时间不限</a>
                         </li>
                         <li>
-                            <a href="/byrbbs/?key={{ key }}&time=1">一天内</a>
+                            <a href="/byrbbs/?key={{ key }}&date=1">一天内</a>
                         </li>
                         <li>
-                            <a href="/byrbbs/?key={{ key }}&time=7">一周内</a>
+                            <a href="/byrbbs/?key={{ key }}&date=7">一周内</a>
                         </li>
                         <li>
-                            <a href="/byrbbs/?key={{ key }}&time=30">一月内</a>
+                            <a href="/byrbbs/?key={{ key }}&date=30">一月内</a>
                         </li>
                         <li>
-                            <a href="/byrbbs/?key={{ key }}&time=365">一年内</a>
+                            <a href="/byrbbs/?key={{ key }}&date=365">一年内</a>
                         </li>
-                        <li class="divider">
-                        </li>
-                        <div data-stopPropagation="true" style="font-size: small; line-height: 22PX; padding-top: 20px; color: #777;padding-left: 20px">
-                            <p style="position: absolute; top: 140px;">自定义</p>
+{#                        <li class="divider">#}
+{#                        </li>#}
+{#                        <div data-stopPropagation="true" style="font-size: small; line-height: 22PX; padding-top: 20px; color: #777;padding-left: 20px">#}
+{#                            <p style="position: absolute; top: 140px;">自定义</p>#}
 {#                            从<input name="st" date-min="0" date-max="20160921" type="datetime" autocomplete="off" value="2016-09-21" data-value="1474387200000" class="c-tip-custom-input">#}
 {#                            至<input name="st" date-min="0" date-max="20160921" type="date" autocomplete="off" value="2016-09-21" data-value="1474387200000" class="c-tip-custom-input">#}
-                            <div id="rendez-vous-french"></div>
-                            <script src="../../static/byrbbs/js/syntaxhighlighter/shCore.js"></script>
-                            <script src="../../static/byrbbs/js/rendezvous.js"></script>
-                            <script src="../../static/byrbbs/js/app.js"></script>
-                            <button style=" margin-top: 5px;margin-bottom: 5px;">确认</button>
-                        </div>
+{#                            <div id="rendez-vous-french"></div>#}
+{#                            <script src="../../static/byrbbs/js/syntaxhighlighter/shCore.js"></script>#}
+{#                            <script src="../../static/byrbbs/js/rendezvous.js"></script>#}
+{#                            <script src="../../static/byrbbs/js/app.js"></script>#}
+{#                            <button style=" margin-top: 5px;margin-bottom: 5px;">确认</button>#}
+{#                        </div>#}
                     </ul>
                 </div>
             </div>
@@ -144,21 +144,21 @@
                 {% if page_max > 1%}
                 <div class="list-pagination" id="page">
                     {% if page > 1%}
-                        <a href="?key={{ key }}&p={{ page|add:"-1" }}&time={{ time }}" jp-role="last" jp-data="上一页">&lt;上一页</a>
+                        <a href="?key={{ key }}&p={{ page|add:"-1" }}&date={{ date }}" jp-role="last" jp-data="上一页">&lt;上一页</a>
                     {% endif %}
 
                     {% for page_num in page|page_list_pre %}
-                        <a href="?key={{ key }}&p={{ page_num }}&time={{ time }}" jp-role="page" jp-data={{ page_num }}>{{ page_num }}</a>
+                        <a href="?key={{ key }}&p={{ page_num }}&date={{ date }}" jp-role="page" jp-data={{ page_num }}>{{ page_num }}</a>
                     {% endfor %}
 
-                    <a href="?key={{ key }}&p={{ page }}&time={{ time }}" jp-role="page" jp-data="1" class="active">{{ page }}</a>
+                    <a href="?key={{ key }}&p={{ page }}&date={{ date }}" jp-role="page" jp-data="1" class="active">{{ page }}</a>
 
                     {% for page_num in page|page_list_next:page_max %}
-                        <a href="?key={{ key }}&p={{ page_num }}&time={{ time }}" jp-role="page" jp-data={{ page_num }}>{{ page_num }}</a>
+                        <a href="?key={{ key }}&p={{ page_num }}&date={{ date }}" jp-role="page" jp-data={{ page_num }}>{{ page_num }}</a>
                     {% endfor %}
 
                     {% if page < page_max%}
-                        <a href="?key={{ key }}&p={{ page|add:"1" }}&time={{ time }}" jp-role="last" jp-data="下一页">下一页&gt;</a>
+                        <a href="?key={{ key }}&p={{ page|add:"1" }}&date={{ date }}" jp-role="last" jp-data="下一页">下一页&gt;</a>
                     {% endif %}
                 </div>
                 {% endif %}

@@ -101,3 +101,18 @@ def menu_type(menu_type, now_type):
         return "menu_total_active"
     else:
         return "menu_total"
+
+
+# 对搜索日期进行处理
+@register.filter
+def date_type(date):
+    if date == u'1':
+        return "一天内"
+    elif date == u'7':
+        return "一周内"
+    elif date == u'30':
+        return "一月内"
+    elif date == u'365':
+        return "一年内"
+    else:
+        return u'时间不限'
