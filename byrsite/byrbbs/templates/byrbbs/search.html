@@ -14,9 +14,6 @@
         <link href="http://apps.bdimg.com/libs/bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet" />
         <script src="http://apps.bdimg.com/libs/jquery/2.1.1/jquery.min.js"></script>
 	    <script src="http://apps.bdimg.com/libs/bootstrap/3.3.4/js/bootstrap.min.js"></script>
-
-		<link rel="stylesheet" href="../../static/byrbbs/rendezvous.css">
-
         <link rel="stylesheet" href="{% static 'byrbbs/search_style.css' %}">
     </head>
 
@@ -60,16 +57,16 @@
                             <a href="/byrbbs/?key={{ key }}&date=all">时间不限</a>
                         </li>
                         <li>
-                            <a href="/byrbbs/?key={{ key }}&date=1">一天内</a>
+                            <a href="/byrbbs/?key={{ key }}&date=1&search_type=exact">一天内</a>
                         </li>
                         <li>
-                            <a href="/byrbbs/?key={{ key }}&date=7">一周内</a>
+                            <a href="/byrbbs/?key={{ key }}&date=7&search_type=exact">一周内</a>
                         </li>
                         <li>
-                            <a href="/byrbbs/?key={{ key }}&date=30">一月内</a>
+                            <a href="/byrbbs/?key={{ key }}&date=30&search_type=exact">一月内</a>
                         </li>
                         <li>
-                            <a href="/byrbbs/?key={{ key }}&date=365">一年内</a>
+                            <a href="/byrbbs/?key={{ key }}&date=365&search_type=exact">一年内</a>
                         </li>
 {#                        <li class="divider">#}
 {#                        </li>#}
@@ -85,6 +82,19 @@
 {#                        </div>#}
                     </ul>
                 </div>
+
+                <div class="btn-group">
+                    <div id="menu1" data-toggle="dropdown">{{ search_type|search_type }}<span class="caret"></span></div>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a href="/byrbbs/?key={{ key }}&search_type=all">所有结果</a>
+                        </li>
+                        <li>
+                            <a href="/byrbbs/?key={{ key }}&search_type=exact">精确匹配</a>
+                        </li>
+                    </ul>
+                </div>
+
             </div>
 
         </div>
@@ -144,21 +154,21 @@
                 {% if page_max > 1%}
                 <div class="list-pagination" id="page">
                     {% if page > 1%}
-                        <a href="?key={{ key }}&p={{ page|add:"-1" }}&date={{ date }}" jp-role="last" jp-data="上一页">&lt;上一页</a>
+                        <a href="?key={{ key }}&p={{ page|add:"-1" }}&date={{ date }}&search_type={{ search_type }}" jp-role="last" jp-data="上一页">&lt;上一页</a>
                     {% endif %}
 
                     {% for page_num in page|page_list_pre %}
-                        <a href="?key={{ key }}&p={{ page_num }}&date={{ date }}" jp-role="page" jp-data={{ page_num }}>{{ page_num }}</a>
+                        <a href="?key={{ key }}&p={{ page_num }}&date={{ date }}&search_type={{ search_type }}" jp-role="page" jp-data={{ page_num }}>{{ page_num }}</a>
                     {% endfor %}
 
-                    <a href="?key={{ key }}&p={{ page }}&date={{ date }}" jp-role="page" jp-data="1" class="active">{{ page }}</a>
+                    <a href="?key={{ key }}&p={{ page }}&date={{ date }}&search_type={{ search_type }}" jp-role="page" jp-data="1" class="active">{{ page }}</a>
 
                     {% for page_num in page|page_list_next:page_max %}
-                        <a href="?key={{ key }}&p={{ page_num }}&date={{ date }}" jp-role="page" jp-data={{ page_num }}>{{ page_num }}</a>
+                        <a href="?key={{ key }}&p={{ page_num }}&date={{ date }}&search_type={{ search_type }}" jp-role="page" jp-data={{ page_num }}>{{ page_num }}</a>
                     {% endfor %}
 
                     {% if page < page_max%}
-                        <a href="?key={{ key }}&p={{ page|add:"1" }}&date={{ date }}" jp-role="last" jp-data="下一页">下一页&gt;</a>
+                        <a href="?key={{ key }}&p={{ page|add:"1" }}&date={{ date }}&search_type={{ search_type }}" jp-role="last" jp-data="下一页">下一页&gt;</a>
                     {% endif %}
                 </div>
                 {% endif %}
@@ -177,7 +187,6 @@
         <div class="modal fade" id="UserModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" >
             <div class="modal-dialog">
                 <div class="modal-content">
-
 
                 </div><!-- /.modal-content -->
             </div><!-- /.modal -->

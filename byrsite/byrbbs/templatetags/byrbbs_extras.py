@@ -116,3 +116,12 @@ def date_type(date):
         return "一年内"
     else:
         return u'时间不限'
+
+
+# 对搜索类型进行处理
+@register.filter
+def search_type(search_type):
+    if search_type == u'exact':
+        return u"精确匹配"
+    else:
+        return u'所有结果'

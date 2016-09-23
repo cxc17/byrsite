@@ -5,5 +5,6 @@ from views import *
 
 urlpatterns = [
     url(r'^$', index),
-    url(r'^user$', user)
+    url(r'^user$', user),
+    url(r'^data$', data)
 ]

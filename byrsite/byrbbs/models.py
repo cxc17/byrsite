@@ -14,12 +14,12 @@ class byr_board(models.Model):
 
 class byr_post(models.Model):
     post_id = models.CharField(max_length=16)
-    title = models.CharField(max_length=255)
-    url = models.CharField(max_length=255)
+    title = models.CharField(max_length=100)
+    url = models.CharField(max_length=80)
     content = models.TextField(blank=True)
-    user_id = models.CharField(max_length=255)
-    user_name = models.CharField(max_length=255)
-    board_name = models.CharField(max_length=255)
+    user_id = models.CharField(max_length=13)
+    user_name = models.CharField(max_length=40)
+    board_name = models.CharField(max_length=30)
     post_num = models.IntegerField()
     publish_time = models.DateTimeField(blank=True)
     last_time = models.DateTimeField(blank=True)
@@ -31,11 +31,11 @@ class byr_post(models.Model):
 
 class byr_comment(models.Model):
     post_id = models.CharField(max_length=16)
-    title = models.CharField(max_length=255)
-    url = models.CharField(max_length=255)
+    title = models.CharField(max_length=100)
+    url = models.CharField(max_length=80)
     content = models.TextField(blank=True)
-    user_id = models.CharField(max_length=255)
-    user_name = models.CharField(max_length=255)
+    user_id = models.CharField(max_length=13)
+    user_name = models.CharField(max_length=40)
     publish_time = models.DateTimeField(blank=True)
     # insert_time = models.DateTimeField
 

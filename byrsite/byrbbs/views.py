@@ -41,7 +41,13 @@ def search(request):
         web_type = "all"
     if web_type not in ['all', 'user', 'data']:
         web_type = "all"
-
+    # 获取搜索类型参数
+    try:
+        search_type = request.GET.get("search_type")
+    except:
+        search_type = "all"
+    if search_type not in ['all', 'exact']:
+        search_type = "all"
     # 获取时间参数
     try:
         web_date = request.GET.get("date")
@@ -50,25 +56,15 @@ def search(request):
     if web_date not in ['all', '1', '7', '30', '365']:
         web_date = "all"
 
-    if web_date == 'all':
-        web_strftime = 0
-    else:
-        web_localtime = time.time() - 86400*int(web_date)
-        web_strftime = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(web_localtime))
+    # 搜索类型为精确匹配
+    if search_type == 'exact':
+        return search_exact(request, key, page, web_type, search_type, web_date, start_time)
 
     # 精确匹配数目
-    if web_strftime:
-        post_result = byr_post.objects.raw("SELECT * from (SELECT * from post WHERE user_name=%s or user_id=%s ORDER BY"
-                                           " publish_time desc) c WHERE publish_time > %s", [key, key, web_strftime])
-        post_count = len([i for i in post_result])
-        comment_result = byr_comment.objects.raw("SELECT * from (SELECT * from comment WHERE user_name=%s or user_id=%s"
-                                                 " ORDER BY publish_time desc ) c WHERE publish_time > %s", [key, key, web_strftime])
-        comment_count = len([i for i in comment_result])
-    else:
-        post_result = byr_post.objects.filter(Q(user_id=key) | Q(user_name=key)).order_by("-publish_time")
-        post_count = post_result.count()
-        comment_result = byr_comment.objects.filter(Q(user_id=key) | Q(user_name=key)).order_by("-publish_time")
-        comment_count = comment_result.count()
+    post_result = byr_post.objects.filter(Q(user_id=key) | Q(user_name=key)).order_by("-publish_time")
+    post_count = post_result.count()
+    comment_result = byr_comment.objects.filter(Q(user_id=key) | Q(user_name=key)).order_by("-publish_time")
+    comment_count = comment_result.count()
 
     # 模糊匹配数目
     post_count_fuzzy_tmp = byr_post.objects.raw("SELECT id, user_id, post_num from `user` where (user_id like %s or "
@@ -111,7 +107,7 @@ def search(request):
         return render(request, 'byrbbs/search.html', {"key": key, "page": page, "search_time": search_time,
                                                       "search_result": search_result, "page_max": page_max,
                                                       "search_count": search_count, "type": web_type,
-                                                      "date": web_date})
+                                                      "date": web_date, 'search_type': search_type})
     # 当搜索页面为精确查找页数
     if page == result_page_exact:
         # 精确匹配结果
@@ -231,7 +227,57 @@ def search(request):
     return render(request, 'byrbbs/search.html', {"key": key, "page": page, "search_time": search_time,
                                                   "search_result": search_result, "page_max": page_max,
                                                   "search_count": search_count, "type": web_type,
-                                                  "date": web_date})
+                                                  "date": web_date, 'search_type': search_type})
+
+
+def search_exact(request, key, page, web_type, search_type, web_date, start_time):
+    if web_date == 'all':
+        web_strftime = 0
+    else:
+        web_localtime = time.time() - 86400*int(web_date)
+        web_strftime = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(web_localtime))
+
+    # 精确匹配数目
+    if web_strftime:
+        post_result = byr_post.objects.raw("SELECT * from (SELECT * from post WHERE user_name=%s or user_id=%s ORDER BY"
+                                           " publish_time desc) c WHERE publish_time > %s", [key, key, web_strftime])
+        post_count = len([i for i in post_result])
+        comment_result = byr_comment.objects.raw("SELECT * from (SELECT * from comment WHERE user_name=%s or user_id=%s"
+                                                 " ORDER BY publish_time desc ) c WHERE publish_time > %s", [key, key, web_strftime])
+        comment_count = len([i for i in comment_result])
+    else:
+        post_result = byr_post.objects.filter(Q(user_id=key) | Q(user_name=key)).order_by("-publish_time")
+        post_count = post_result.count()
+        comment_result = byr_comment.objects.filter(Q(user_id=key) | Q(user_name=key)).order_by("-publish_time")
+        comment_count = comment_result.count()
+
+    # 匹配总数目
+    search_count = post_count + comment_count
+
+    # 结果总页数
+    page_max = get_page(search_count)[0]
+
+    # 规范page数目
+    if page <= 0:
+        page = 1
+    elif page > page_max:
+        page = page_max
+
+    # 精确匹配结果
+    result_exact = []
+    result_exact.extend(post_result[:page*10])
+    result_exact.extend(comment_result[:page*10])
+    result_exact = sorted(result_exact, key=lambda i: i.publish_time, reverse=True)
+
+    search_result = result_exact[(page-1)*10: page*10]
+
+    # 搜索结束时间
+    end_time = time.time()
+    search_time = end_time - start_time
+    return render(request, 'byrbbs/search.html', {"key": key, "page": page, "search_time": search_time,
+                                                  "search_result": search_result, "page_max": page_max,
+                                                  "search_count": search_count, "type": web_type,
+                                                  "date": web_date, 'search_type': search_type})
 
 
 def user(request):
@@ -264,6 +310,10 @@ def user(request):
             return HttpResponse('查无此人')
 
     return render(request, 'byrbbs/userInfo.html', {'user_info': user_info, 'user_id': user_id})
+
+
+def data(request):
+    return render(request, 'byrbbs/data.html')
 
 
 # 获取页数
