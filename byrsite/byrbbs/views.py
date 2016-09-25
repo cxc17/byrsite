@@ -313,7 +313,10 @@ def user(request):
 
 
 def data(request):
-    return render(request, 'byrbbs/data.html')
+    data_name = request.GET.get("did")
+    data_info = byr_data.objects.filter(data_name=data_name)
+    data_info = json.loads(data_info[0].data_value)
+    return render(request, 'byrbbs/data.html', {'data_info': data_info})
 
 
 # 获取页数

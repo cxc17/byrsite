@@ -1,4 +1,5 @@
 {% load staticfiles %}
+{% load data_extras %}
 
 <!DOCTYPE html>
 <html lang="en">
@@ -13,79 +14,253 @@
 
     <body>
         <!-- 为ECharts准备一个具备大小（宽高）的Dom -->
-        <div id="main" style="width: 600px;height:400px;"></div>
+        <div id="astro" style="width: 800px;height:500px;"></div>
         <script type="text/javascript">
             // 基于准备好的dom，初始化echarts实例
-            var myChart = echarts.init(document.getElementById('main'));
+            var myChart = echarts.init(document.getElementById('astro'));
 
             var option = {
-                tooltip : {
-                    trigger: 'axis',
-                    axisPointer : {            // 坐标轴指示器，坐标轴触发有效
-                        type : 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
-                    }
-                },
-                legend: {
-                    data:['男生','女生','保密']
-                },
-                grid: {
-                    left: '3%',
-                    right: '4%',
-                    bottom: '3%',
-                    containLabel: true
-                },
-                xAxis : [
-                    {
-                        type : 'category',
-                        data : ['白羊座','金牛座','双子座','巨蟹座','狮子座','处女座','天秤座','天蝎座','射手座','摩羯座','水瓶座','双鱼座']
-                    }
-                ],
-                yAxis : [
-                    {
-                        type : 'value'
-                    }
-                ],
-                series : [
-                    {
-                        name:'男生',
-                        type:'bar',
-                        barGap:'0%',
-                        data:[320, 332, 301, 334, 390, 330, 320, 301, 334, 390, 330, 320],
-                        itemStyle: {
-                            normal: {
-{#                                color: '#3384FE'#}
-                            }
+                    tooltip : {
+                        trigger: 'axis',
+                        axisPointer : {            // 坐标轴指示器，坐标轴触发有效
+                            type : 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
                         }
                     },
-                    {
-                        name:'女生',
-                        type:'bar',
-                        barGap:'0%',
-                        data:[120, 132, 101, 134, 90, 230, 210, 301, 334, 390, 330, 320],
-                        itemStyle: {
-                            normal: {
-{#                                color: '#F61A33'#}
-                            }
-                        }
+                    legend: {
+                        data:['男生','女生','全部']
                     },
-                    {
-                        name:'保密',
-                        type:'bar',
-                        barGap:'0%',
-                        data:[220, 182, 191, 234, 290, 330, 310, 301, 334, 390, 330, 320],
-                        itemStyle: {
-                            normal: {
-{#                                color: '#2DBA29'#}
+                    grid: {
+                        left: '3%',
+                        right: '4%',
+                        bottom: '3%',
+                        containLabel: true
+                    },
+                    xAxis : [
+                        {
+                            type : 'category',
+                            data : ['白羊座','金牛座','双子座','巨蟹座','狮子座','处女座','天秤座','天蝎座','射手座','魔羯座','水瓶座','双鱼座'],
+                            axisLabel :{
+                                interval:0
                             }
                         }
-                    }
-                ]
-            };
+                    ],
+                    yAxis : [
+                        {
+                            type : 'value'
+                        }
+                    ],
+                    series : [
+                        {
+                            name:'男生',
+                            type:'bar',
+                            barGap:'0%',
+                            data:{{ data_info|astro_info:'boy' }},
+                            itemStyle: {
+                                normal: {
+                                    color: '#61a0a8'
+                                }
+                            }
+                        },
+                        {
+                            name:'女生',
+                            type:'bar',
+                            barGap:'0%',
+                            data:{{ data_info|astro_info:'girl' }},
+                            itemStyle: {
+                                normal: {
+                                    color: '#c23531'
+                                }
+                            }
+                        },
+                        {
+                            name:'全部',
+                            type:'bar',
+                            barGap:'0%',
+                            data:{{ data_info|astro_info:'all' }},
+                            itemStyle: {
+                                normal: {
+                                    color: '#6e7074'
+                                }
+                            }
+                        }
+                    ]
+                };
 
-
-
-            // 使用刚指定的配置项和数据显示图表。
             myChart.setOption(option);
         </script>
+
+        <div id="astro_boy" style="width: 800px;height:500px;"></div>
+        <script type="text/javascript">
+            // 基于准备好的dom，初始化echarts实例
+            var myChart = echarts.init(document.getElementById('astro_boy'));
+
+            var option = {
+                    title : {
+                        text: '男生十二星座比例图',
+                        x:'center'
+                    },
+                    tooltip : {
+                        trigger: 'item',
+                        formatter: "{b} : {c} ({d}%)"
+                    },
+                    legend: {
+                        orient: 'vertical',
+                        left: 'left',
+                        data : ['白羊座','金牛座','双子座','巨蟹座','狮子座','处女座','天秤座','天蝎座','射手座','魔羯座','水瓶座','双鱼座']
+                    },
+                    series : [
+                        {
+                            type: 'pie',
+                            radius : '55%',
+                            center: ['50%', '60%'],
+                            data: [
+                                {value:{% astro_value data_info 'boy' '白羊座' %}, name:'白羊座'},
+                                {value:{% astro_value data_info 'boy' '金牛座' %}, name:'金牛座'},
+                                {value:{% astro_value data_info 'boy' '双子座' %}, name:'双子座'},
+                                {value:{% astro_value data_info 'boy' '巨蟹座' %}, name:'巨蟹座'},
+                                {value:{% astro_value data_info 'boy' '狮子座' %}, name:'狮子座'},
+                                {value:{% astro_value data_info 'boy' '处女座' %}, name:'处女座'},
+                                {value:{% astro_value data_info 'boy' '天秤座' %}, name:'天秤座'},
+                                {value:{% astro_value data_info 'boy' '天蝎座' %}, name:'天蝎座'},
+                                {value:{% astro_value data_info 'boy' '射手座' %}, name:'射手座'},
+                                {value:{% astro_value data_info 'boy' '魔羯座' %}, name:'魔羯座'},
+                                {value:{% astro_value data_info 'boy' '水瓶座' %}, name:'水瓶座'},
+                                {value:{% astro_value data_info 'boy' '双鱼座' %}, name:'双鱼座',
+                                    itemStyle: {
+                                        normal: {
+                                            color: '#745f63'
+                                        }
+                                }}
+                            ],
+                            itemStyle: {
+                                emphasis: {
+                                    shadowBlur: 10,
+                                    shadowOffsetX: 0,
+                                    shadowColor: 'rgba(0, 0, 0, 0.5)'
+                                }
+                            }
+                        }
+                    ]
+                };
+
+            myChart.setOption(option);
+        </script>
+
+
+        <div id="astro_girl" style="width: 800px;height:500px;"></div>
+        <script type="text/javascript">
+            // 基于准备好的dom，初始化echarts实例
+            var myChart = echarts.init(document.getElementById('astro_girl'));
+
+            var option = {
+                    title : {
+                        text: '女生十二星座比例图',
+                        x:'center'
+                    },
+                    tooltip : {
+                        trigger: 'item',
+                        formatter: "{b} : {c} ({d}%)"
+                    },
+                    legend: {
+                        orient: 'vertical',
+                        left: 'left',
+                        data : ['白羊座','金牛座','双子座','巨蟹座','狮子座','处女座','天秤座','天蝎座','射手座','魔羯座','水瓶座','双鱼座']
+                    },
+                    series : [
+                        {
+                            type: 'pie',
+                            radius : '55%',
+                            center: ['50%', '60%'],
+                            data: [
+                                {value:{% astro_value data_info 'girl' '白羊座' %}, name:'白羊座'},
+                                {value:{% astro_value data_info 'girl' '金牛座' %}, name:'金牛座'},
+                                {value:{% astro_value data_info 'girl' '双子座' %}, name:'双子座'},
+                                {value:{% astro_value data_info 'girl' '巨蟹座' %}, name:'巨蟹座'},
+                                {value:{% astro_value data_info 'girl' '狮子座' %}, name:'狮子座'},
+                                {value:{% astro_value data_info 'girl' '处女座' %}, name:'处女座'},
+                                {value:{% astro_value data_info 'girl' '天秤座' %}, name:'天秤座'},
+                                {value:{% astro_value data_info 'girl' '天蝎座' %}, name:'天蝎座'},
+                                {value:{% astro_value data_info 'girl' '射手座' %}, name:'射手座'},
+                                {value:{% astro_value data_info 'girl' '魔羯座' %}, name:'魔羯座'},
+                                {value:{% astro_value data_info 'girl' '水瓶座' %}, name:'水瓶座'},
+                                {value:{% astro_value data_info 'girl' '双鱼座' %}, name:'双鱼座',
+                                    itemStyle: {
+                                        normal: {
+                                            color: '#745f63'
+                                        }
+                                }}
+                            ],
+                            itemStyle: {
+                                emphasis: {
+                                    shadowBlur: 10,
+                                    shadowOffsetX: 0,
+                                    shadowColor: 'rgba(0, 0, 0, 0.5)'
+                                }
+                            }
+                        }
+                    ]
+                };
+
+            myChart.setOption(option);
+        </script>
+
+
+        <div id="astro_all" style="width: 800px;height:500px;"></div>
+        <script type="text/javascript">
+            // 基于准备好的dom，初始化echarts实例
+            var myChart = echarts.init(document.getElementById('astro_all'));
+
+            var option = {
+                    title : {
+                        text: '十二星座比例图',
+                        x:'center'
+                    },
+                    tooltip : {
+                        trigger: 'item',
+                        formatter: "{b} : {c} ({d}%)"
+                    },
+                    legend: {
+                        orient: 'vertical',
+                        left: 'left',
+                        data : ['白羊座','金牛座','双子座','巨蟹座','狮子座','处女座','天秤座','天蝎座','射手座','魔羯座','水瓶座','双鱼座']
+                    },
+                    series : [
+                        {
+                            type: 'pie',
+                            radius : '55%',
+                            center: ['50%', '60%'],
+                            data: [
+                                {value:{% astro_value data_info 'all' '白羊座' %}, name:'白羊座'},
+                                {value:{% astro_value data_info 'all' '金牛座' %}, name:'金牛座'},
+                                {value:{% astro_value data_info 'all' '双子座' %}, name:'双子座'},
+                                {value:{% astro_value data_info 'all' '巨蟹座' %}, name:'巨蟹座'},
+                                {value:{% astro_value data_info 'all' '狮子座' %}, name:'狮子座'},
+                                {value:{% astro_value data_info 'all' '处女座' %}, name:'处女座'},
+                                {value:{% astro_value data_info 'all' '天秤座' %}, name:'天秤座'},
+                                {value:{% astro_value data_info 'all' '天蝎座' %}, name:'天蝎座'},
+                                {value:{% astro_value data_info 'all' '射手座' %}, name:'射手座'},
+                                {value:{% astro_value data_info 'all' '魔羯座' %}, name:'魔羯座'},
+                                {value:{% astro_value data_info 'all' '水瓶座' %}, name:'水瓶座'},
+                                {value:{% astro_value data_info 'all' '双鱼座' %}, name:'双鱼座',
+                                    itemStyle: {
+                                        normal: {
+                                            color: '#745f63'
+                                        }
+                                }}
+                            ],
+                            itemStyle: {
+                                emphasis: {
+                                    shadowBlur: 10,
+                                    shadowOffsetX: 0,
+                                    shadowColor: 'rgba(0, 0, 0, 0.5)'
+                                }
+                            }
+                        }
+                    ]
+                };
+
+            myChart.setOption(option);
+        </script>
+
     </body>
 </html>

@@ -66,3 +66,12 @@ class byr_user(models.Model):
 
     class Meta:
         db_table = 'user'
+
+
+class byr_data(models.Model):
+    data_name = models.CharField(max_length=255)
+    data_value = models.TextField(blank=True)
+
+    class Meta:
+        db_table = 'data'
+
