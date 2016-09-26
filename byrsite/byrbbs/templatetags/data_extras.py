@@ -1,6 +1,7 @@
 # coding: utf-8
 
 from django import template
+import json
 
 
 register = template.Library()
@@ -36,4 +37,3 @@ def astro_value(data_info, gender, astro):
         data_info = data_info[u'全部']
 
     return data_info[astro]
-    # return "处女座"
