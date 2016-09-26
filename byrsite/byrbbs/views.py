@@ -112,8 +112,12 @@ def search(request):
     if page == result_page_exact:
         # 精确匹配结果
         result_exact = []
-        result_exact.extend(post_result[max(post_count-search_result_exact_last, 0):])
-        result_exact.extend(comment_result[max(comment_count-search_result_exact_last, 0):])
+        if page == 1:
+            result_exact.extend(post_result)
+            result_exact.extend(comment_result)
+        else:
+            result_exact.extend(post_result[max(post_count-search_result_exact_last, 0):])
+            result_exact.extend(comment_result[max(comment_count-search_result_exact_last, 0):])
         result_exact = sorted(result_exact, key=lambda i: i.publish_time, reverse=True)
 
         search_result = result_exact[-search_result_exact_last:]
