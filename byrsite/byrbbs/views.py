@@ -317,8 +317,12 @@ def user(request):
 
 
 def data(request):
+    return render(request, 'byrbbs/data.html')
+
+
+def data_astro(request):
     data_name = request.GET.get("did")
-    data_info = byr_data.objects.filter(data_name=data_name)
+    data_info = byr_data.objects.filter(data_name='astro')
     data_info = json.loads(data_info[0].data_value)
     return render(request, 'byrbbs/data_astro.html', {'data_info': data_info})
 

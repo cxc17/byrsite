@@ -65,10 +65,8 @@ body,h1,li{
 	text-decoration:none;
 }
 
-.menu_total:hover{
-	cursor: pointer;
+.menu_total a:hover{
 	color: #000000;
-	text-decoration: none;
 }
 
 .btn-group{

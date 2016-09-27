@@ -13,7 +13,6 @@
         <link rel="icon" sizes="any" mask="" href="{% static 'byrbbs/images/logo_title.png' %}">
         <link href="http://apps.bdimg.com/libs/bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet" />
         <script src="http://apps.bdimg.com/libs/jquery/2.1.1/jquery.min.js"></script>
-	    <script src="http://apps.bdimg.com/libs/bootstrap/3.3.4/js/bootstrap.min.js"></script>
         <link rel="stylesheet" href="{% static 'byrbbs/search_style.css' %}">
     </head>
 
@@ -48,7 +47,7 @@
             <div id="header-navigation">
                 <div class="{{ type|menu_type:"all" }}"><a href="/byrbbs/?key={{ key }}&type=all">全部</a></div>
                 <div class="{{ type|menu_type:"user" }}"><a href="/byrbbs/?key={{ key }}&type=user">用户</a></div>
-                <div class="{{ type|menu_type:"data" }}"><a href="/byrbbs/?key={{ key }}&type=data">数据</a></div>
+                <div class="{{ type|menu_type:"data" }}"><a href="/byrbbs/data">数据</a></div>
 
                 <div class="btn-group">
                     <div id="menu1" data-toggle="dropdown">{{ date|date_type }}<span class="caret"></span></div>
@@ -68,18 +67,6 @@
                         <li>
                             <a href="/byrbbs/?key={{ key }}&date=365&search_type=exact">一年内</a>
                         </li>
-{#                        <li class="divider">#}
-{#                        </li>#}
-{#                        <div data-stopPropagation="true" style="font-size: small; line-height: 22PX; padding-top: 20px; color: #777;padding-left: 20px">#}
-{#                            <p style="position: absolute; top: 140px;">自定义</p>#}
-{#                            从<input name="st" date-min="0" date-max="20160921" type="datetime" autocomplete="off" value="2016-09-21" data-value="1474387200000" class="c-tip-custom-input">#}
-{#                            至<input name="st" date-min="0" date-max="20160921" type="date" autocomplete="off" value="2016-09-21" data-value="1474387200000" class="c-tip-custom-input">#}
-{#                            <div id="rendez-vous-french"></div>#}
-{#                            <script src="../../static/byrbbs/js/syntaxhighlighter/shCore.js"></script>#}
-{#                            <script src="../../static/byrbbs/js/rendezvous.js"></script>#}
-{#                            <script src="../../static/byrbbs/js/app.js"></script>#}
-{#                            <button style=" margin-top: 5px;margin-bottom: 5px;">确认</button>#}
-{#                        </div>#}
                     </ul>
                 </div>
 

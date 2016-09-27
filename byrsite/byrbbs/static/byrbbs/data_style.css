@@ -1,0 +1,89 @@
+html, body{
+	height:100%;
+}
+
+body{
+	font-family: "microsoft yahei", "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+#header{
+	position: absolute;
+	z-index: 1;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 50px;
+	background: #293c55;
+	border-bottom: 1px solid #e7e7e7
+}
+
+#header-brand a{
+	float: left;
+	font-size: 30px;
+	margin: 0 20px 0 10px;
+}
+
+
+#menu_total a{
+	float: right;
+	width: 70px;
+	line-height: 50px;
+	color: #ffffff;
+    font-size: 15px;
+    margin: 0px;
+	text-align:center;
+	text-decoration:none;
+}
+
+#menu_total a:hover{
+	background: #162436;
+}
+
+#menu_total_active a{
+	float: right;
+	width: 70px;
+	line-height: 42px;
+	color: #ffffff;
+    font-size: 15px;
+	margin: 0px;
+	text-align:center;
+	text-decoration:none;
+	border-top: 4px solid #a9314d;
+}
+
+#menu_total_active a:hover{
+	background: #162436;
+}
+
+
+.container{
+	/*margin: 50px 0 0 0;*/
+	width: 100%;
+    height: 100%;
+}
+
+.clearfix{
+    height: 100%;
+    padding: 50px 0 0 0;
+}
+
+#left_menu{
+    padding: 50px 0 0 0;
+    border-right: 1px solid #dcdcdc;
+    height: 100%;
+    width: 15%;
+    float: left;
+}
+
+#right_menu{
+    padding: 50px 0 0 0;
+    height: 100%;
+}
+
+#dataframe{
+    margin: 0px 0 0 0;
+    padding-left: 3%;
+    height: 99%;
+    width: 85%;
+    border-width: 0px;
+}

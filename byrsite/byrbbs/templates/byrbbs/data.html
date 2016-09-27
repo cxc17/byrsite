@@ -1,0 +1,34 @@
+{% load staticfiles %}
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>北邮人论坛数据</title>
+        <link rel="icon" sizes="any" mask="" href="{% static 'byrbbs/images/logo_title.png' %}">
+        <link href="http://apps.bdimg.com/libs/bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet" />
+        <link rel="stylesheet" href="{% static 'byrbbs/data_style.css' %}">
+    </head>
+
+    <body>
+        <div id="header">
+            <div id="header-brand">
+                <a href="/byrbbs"><img src="{% static 'byrbbs/images/logo.png' %}"  width="100" height="28"></a>
+                <div id="menu_total"><a href="/byrbbs/?type=user">用户</a></div>
+                <div id="menu_total_active"><a href="/byrbbs/data">数据</a></div>
+                <div id="menu_total"><a href="/byrbbs/">首页</a></div>
+            </div>
+        </div>
+
+        <div id="left_menu">
+            <a href="/byrbbs/data_astro" target="dataframe">as</a>
+        </div>
+
+        <div id="right_menu">
+            <iframe id="dataframe" name="dataframe"></iframe>
+        </div>
+
+    </body>
+</html>
