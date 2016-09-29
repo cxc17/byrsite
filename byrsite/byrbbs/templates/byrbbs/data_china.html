@@ -1,0 +1,121 @@
+{% load staticfiles %}
+{% load data_extras %}
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>北邮人论坛数据</title>
+        <link rel="icon" sizes="any" mask="" href="{% static 'byrbbs/images/logo_title.png' %}">
+        <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/echarts-all-3.js"></script>
+        <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/extension/dataTool.min.js"></script>
+        <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/map/js/china.js"></script>
+        <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/extension/bmap.min.js"></script>
+    </head>
+
+    <body>
+        <b style="color: #B03A5B;font-size: 20px;height: 40px;line-height: 40px;">全国北邮人论坛用户数</b>
+        <hr style="	border-top:1px ridge #cbcbcb;margin-top: 0px;margin-right: 3%;"/>
+
+        <div id="china" style="width: 1000px;height:800px;"></div>
+        <script type="text/javascript">
+            // 基于准备好的dom，初始化echarts实例
+            var myChart = echarts.init(document.getElementById('china'));
+
+            function randomData() {
+                return Math.round(Math.random()*1000);
+            }
+
+            option = {
+                title: {
+                    text: '全国各地区用户数',
+                    left: 'center'
+                },
+                tooltip: {
+                    trigger: 'item'
+                },
+                legend: {
+                    orient: 'vertical',
+                    left: 'left',
+                    data:['用户数']
+                },
+                visualMap: {
+                    min: 0,
+                    max: 2500,
+                    left: 'left',
+                    top: 'bottom',
+                    text: ['高','低'],           // 文本，默认为数值文本
+                    calculable: true
+                },
+                toolbox: {
+                    show: true,
+                    orient: 'vertical',
+                    left: 'right',
+                    top: 'center',
+                    feature: {
+                        dataView: {readOnly: false},
+                        restore: {},
+                        saveAsImage: {}
+                    }
+                },
+                series: [
+                    {
+                        name: '用户数',
+                        type: 'map',
+                        mapType: 'china',
+                        roam: false,
+                        label: {
+                            normal: {
+                                show: true
+                            },
+                            emphasis: {
+                                show: true
+                            }
+                        },
+                        data:[
+                            {name: '北京',value: randomData() },
+                            {name: '天津',value: randomData() },
+                            {name: '上海',value: randomData() },
+                            {name: '重庆',value: randomData() },
+                            {name: '河北',value: randomData() },
+                            {name: '河南',value: randomData() },
+                            {name: '云南',value: randomData() },
+                            {name: '辽宁',value: randomData() },
+                            {name: '黑龙江',value: randomData() },
+                            {name: '湖南',value: randomData() },
+                            {name: '安徽',value: randomData() },
+                            {name: '山东',value: randomData() },
+                            {name: '新疆',value: randomData() },
+                            {name: '江苏',value: randomData() },
+                            {name: '浙江',value: randomData() },
+                            {name: '江西',value: randomData() },
+                            {name: '湖北',value: randomData() },
+                            {name: '广西',value: randomData() },
+                            {name: '甘肃',value: randomData() },
+                            {name: '山西',value: randomData() },
+                            {name: '内蒙古',value: randomData() },
+                            {name: '陕西',value: randomData() },
+                            {name: '吉林',value: randomData() },
+                            {name: '福建',value: randomData() },
+                            {name: '贵州',value: randomData() },
+                            {name: '广东',value: randomData() },
+                            {name: '青海',value: randomData() },
+                            {name: '西藏',value: randomData() },
+                            {name: '四川',value: randomData() },
+                            {name: '宁夏',value: randomData() },
+                            {name: '海南',value: randomData() },
+                            {name: '台湾',value: randomData() },
+                            {name: '香港',value: randomData() },
+                            {name: '澳门',value: randomData() }
+                        ]
+                    }
+                ]
+            };
+
+            myChart.setOption(option);
+        </script>
+
+    </body>
+</html>

@@ -317,14 +317,23 @@ def user(request):
 
 
 def data(request):
+    try:
+        data_name = request.GET.get("did")
+    except:
+        data_name = ""
+
+    if data_name in ['astro', 'china']:
+        try:
+            data_info = byr_data.objects.filter(data_name=data_name)
+            data_info = json.loads(data_info[0].data_value)
+        except:
+            data_info = ""
+        if data_name == 'astro':
+            return render(request, 'byrbbs/data_astro.html', {'data_info': data_info})
+        elif data_name == 'china':
+            return render(request, 'byrbbs/data_china.html', {'data_info': data_info})
+
     return render(request, 'byrbbs/data.html')
-
-
-def data_astro(request):
-    data_name = request.GET.get("did")
-    data_info = byr_data.objects.filter(data_name='astro')
-    data_info = json.loads(data_info[0].data_value)
-    return render(request, 'byrbbs/data_astro.html', {'data_info': data_info})
 
 
 # 获取页数

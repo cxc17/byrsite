@@ -13,9 +13,9 @@
     </head>
 
     <body>
-        <b style="color: #B03A5B;font-size: 20px;height: 40px;line-height: 40px;">
-            用户星座数据
-        </b>
+        <b style="color: #B03A5B;font-size: 20px;height: 40px;line-height: 40px;">用户星座数据</b>
+        <hr style="	border-top:1px ridge #cbcbcb;margin-top: 0px;margin-right: 3%;"/>
+
         <div id="astro" style="width: 800px;height:500px;"></div>
         <script type="text/javascript">
             // 基于准备好的dom，初始化echarts实例
@@ -48,7 +48,8 @@
                     ],
                     yAxis : [
                         {
-                            type : 'value'
+                            name: '用户数/人',
+                            type: 'value'
                         }
                     ],
                     series : [

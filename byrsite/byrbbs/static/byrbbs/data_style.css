@@ -1,6 +1,6 @@
 html, body{
 	height:100%;
-	background: #ededf0;
+	background: #f8f9fb;
 }
 
 body{
@@ -126,13 +126,13 @@ body{
 }
 
 #right_menu{
-	background: #ededf0;
+	background: #f8f9fb;
     padding: 50px 0 0 0;
     height: 100%;
 }
 
 #dataframe{
-	background: #ededf0;
+	background: #f8f9fb;
     margin: 0px 0 0 0;
     padding-left: 3%;
     height: 99%;
