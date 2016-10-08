@@ -13,20 +13,18 @@
         <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/extension/dataTool.min.js"></script>
         <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/map/js/china.js"></script>
         <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/extension/bmap.min.js"></script>
+
+{#        <link rel="icon" sizes="any" mask="" href="{% static 'byrbbs/images/logo_title.png' %}">#}
     </head>
 
     <body>
         <b style="color: #B03A5B;font-size: 20px;height: 40px;line-height: 40px;">全国北邮人论坛用户数</b>
         <hr style="	border-top:1px ridge #cbcbcb;margin-top: 0px;margin-right: 3%;"/>
 
-        <div id="china" style="width: 1000px;height:800px;"></div>
+        <div id="china_map" style="width: 1000px;height:800px;"></div>
         <script type="text/javascript">
             // 基于准备好的dom，初始化echarts实例
-            var myChart = echarts.init(document.getElementById('china'));
-
-            function randomData() {
-                return Math.round(Math.random()*1000);
-            }
+            var myChart = echarts.init(document.getElementById('china_map'));
 
             option = {
                 title: {
@@ -47,7 +45,10 @@
                     left: 'left',
                     top: 'bottom',
                     text: ['高','低'],           // 文本，默认为数值文本
-                    calculable: true
+                    calculable: true,
+                    inRange: {
+                        color: ['#50a3ba', '#eac736', '#d94e5d']
+                    }
                 },
                 toolbox: {
                     show: true,
@@ -74,48 +75,90 @@
                                 show: true
                             }
                         },
-                        data:[
-                            {name: '北京',value: randomData() },
-                            {name: '天津',value: randomData() },
-                            {name: '上海',value: randomData() },
-                            {name: '重庆',value: randomData() },
-                            {name: '河北',value: randomData() },
-                            {name: '河南',value: randomData() },
-                            {name: '云南',value: randomData() },
-                            {name: '辽宁',value: randomData() },
-                            {name: '黑龙江',value: randomData() },
-                            {name: '湖南',value: randomData() },
-                            {name: '安徽',value: randomData() },
-                            {name: '山东',value: randomData() },
-                            {name: '新疆',value: randomData() },
-                            {name: '江苏',value: randomData() },
-                            {name: '浙江',value: randomData() },
-                            {name: '江西',value: randomData() },
-                            {name: '湖北',value: randomData() },
-                            {name: '广西',value: randomData() },
-                            {name: '甘肃',value: randomData() },
-                            {name: '山西',value: randomData() },
-                            {name: '内蒙古',value: randomData() },
-                            {name: '陕西',value: randomData() },
-                            {name: '吉林',value: randomData() },
-                            {name: '福建',value: randomData() },
-                            {name: '贵州',value: randomData() },
-                            {name: '广东',value: randomData() },
-                            {name: '青海',value: randomData() },
-                            {name: '西藏',value: randomData() },
-                            {name: '四川',value: randomData() },
-                            {name: '宁夏',value: randomData() },
-                            {name: '海南',value: randomData() },
-                            {name: '台湾',value: randomData() },
-                            {name: '香港',value: randomData() },
-                            {name: '澳门',value: randomData() }
-                        ]
+                        data:{{ data_info|province_value|safe}}
                     }
                 ]
             };
 
             myChart.setOption(option);
         </script>
+
+        <div id="china_bar" style="width: 1000px;height:500px;"></div>
+        <script type="text/javascript">
+            // 基于准备好的dom，初始化echarts实例
+            var myChart = echarts.init(document.getElementById('china_bar'));
+
+            var option = {
+                    tooltip : {
+                        trigger: 'axis',
+                        axisPointer : {            // 坐标轴指示器，坐标轴触发有效
+                            type : 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+                        }
+                    },
+                    legend: {
+                        data:['男生','女生','全部']
+                    },
+                    grid: {
+                        left: '3%',
+                        right: '4%',
+                        bottom: '3%',
+                        containLabel: true
+                    },
+                    xAxis : [
+                        {
+                            type : 'category',
+                            data : ['北京', '广东', '天津', '河北', '上海', '浙江', '山东', '江苏', '四川', '河南', '陕西', '辽宁', '山西', '福建', '湖北', '安徽', '湖南', '黑龙江', '江西', '香港', '重庆', '吉林', '广西', '内蒙古', '云南', '甘肃', '贵州', '海南', '新疆', '宁夏', '青海', '台湾', '西藏', '澳门'],
+                            axisLabel :{
+                                interval:0
+                            }
+                        }
+                    ],
+                    yAxis : [
+                        {
+                            name: '用户数/人',
+                            type: 'value'
+                        }
+                    ],
+                    series : [
+                        {
+                            name:'男生',
+                            type:'bar',
+                            barGap:'0%',
+                            data:{{ data_info|province_info:'boy' }},
+                            itemStyle: {
+                                normal: {
+                                    color: '#61a0a8'
+                                }
+                            }
+                        },
+                        {
+                            name:'女生',
+                            type:'bar',
+                            barGap:'0%',
+                            data:{{ data_info|province_info:'girl' }},
+                            itemStyle: {
+                                normal: {
+                                    color: '#c23531'
+                                }
+                            }
+                        },
+                        {
+                            name:'全部',
+                            type:'bar',
+                            barGap:'0%',
+                            data:{{ data_info|province_info:'all' }},
+                            itemStyle: {
+                                normal: {
+                                    color: '#6e7074'
+                                }
+                            }
+                        }
+                    ]
+                };
+
+            myChart.setOption(option);
+        </script>
+
 
     </body>
 </html>

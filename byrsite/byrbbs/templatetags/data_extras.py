@@ -3,7 +3,6 @@
 from django import template
 import json
 
-
 register = template.Library()
 
 
@@ -37,3 +36,35 @@ def astro_value(data_info, gender, astro):
         data_info = data_info[u'全部']
 
     return data_info[astro]
+
+
+# 处理全国用户数
+@register.filter
+def province_value(data_info):
+    province = []
+    for k, v in data_info[u'全部'].items():
+        province.append({'name': k, 'value': v})
+
+    return json.dumps(province, ensure_ascii=False)
+
+
+# 处理全国用户数
+@register.filter
+def province_info(data_info, gender):
+    if gender == 'boy':
+        data_info = data_info[u'男生']
+    elif gender == 'girl':
+        data_info = data_info[u'女生']
+    else:
+        data_info = data_info[u'全部']
+    province_data = []
+    provinces = [u'北京', u'广东', u'天津', u'河北', u'上海', u'浙江', u'山东', u'江苏', u'四川', u'河南', u'陕西', u'辽宁',
+                 u'山西', u'福建', u'湖北', u'安徽', u'湖南', u'黑龙江', u'江西', u'香港', u'重庆', u'吉林', u'广西', u'内蒙古',
+                 u'云南', u'甘肃', u'贵州', u'海南', u'新疆', u'宁夏', u'青海', u'台湾', u'西藏', u'澳门']
+    for province in provinces:
+        try:
+            province_data.append(data_info[province])
+        except:
+            province_data.append(0)
+    return province_data
+
