@@ -13,15 +13,13 @@
         <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/extension/dataTool.min.js"></script>
         <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/map/js/china.js"></script>
         <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/extension/bmap.min.js"></script>
-
-{#        <link rel="icon" sizes="any" mask="" href="{% static 'byrbbs/images/logo_title.png' %}">#}
     </head>
 
-    <body>
+    <body style="height: 100%">
         <b style="color: #B03A5B;font-size: 20px;height: 40px;line-height: 40px;">全国北邮人论坛用户数</b>
         <hr style="	border-top:1px ridge #cbcbcb;margin-top: 0px;margin-right: 3%;"/>
 
-        <div id="china_map" style="width: 1000px;height:800px;"></div>
+        <div id="china_map" style="height: 800px;max-width: 97%;"></div>
         <script type="text/javascript">
             // 基于准备好的dom，初始化echarts实例
             var myChart = echarts.init(document.getElementById('china_map'));
@@ -83,7 +81,7 @@
             myChart.setOption(option);
         </script>
 
-        <div id="china_bar" style="width: 1000px;height:500px;"></div>
+        <div id="china_bar" style="max-width: 97%;height: 600px;"></div>
         <script type="text/javascript">
             // 基于准备好的dom，初始化echarts实例
             var myChart = echarts.init(document.getElementById('china_bar'));
@@ -107,7 +105,7 @@
                     xAxis : [
                         {
                             type : 'category',
-                            data : ['北京', '广东', '天津', '河北', '上海', '浙江', '山东', '江苏', '四川', '河南', '陕西', '辽宁', '山西', '福建', '湖北', '安徽', '湖南', '黑龙江', '江西', '香港', '重庆', '吉林', '广西', '内蒙古', '云南', '甘肃', '贵州', '海南', '新疆', '宁夏', '青海', '台湾', '西藏', '澳门'],
+                            data : ['广东', '天津', '河北', '上海', '浙江', '山东', '江苏', '四川', '河南', '陕西', '辽宁', '山西', '福建', '湖北', '安徽', '湖南', '黑龙江', '江西', '香港', '重庆', '吉林', '广西', '内蒙古', '云南', '甘肃', '贵州', '海南', '新疆', '宁夏', '青海', '台湾', '西藏', '澳门'],
                             axisLabel :{
                                 interval:0
                             }
