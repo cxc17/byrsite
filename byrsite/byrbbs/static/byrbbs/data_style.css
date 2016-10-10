@@ -121,7 +121,8 @@ body{
 
 #left_menu_hr{
 	border-top:1px ridge #dcdcdc;
-	margin-top: 0px;
+	margin-top: 5px;
+	margin-bottom: 5px;
 	margin-right: 15px;
 }
 

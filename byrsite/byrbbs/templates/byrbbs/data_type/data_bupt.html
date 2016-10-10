@@ -1,0 +1,78 @@
+{% load staticfiles %}
+{% load data_extras %}
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>北邮人论坛数据</title>
+        <link rel="icon" sizes="any" mask="" href="{% static 'byrbbs/images/logo_title.png' %}">
+        <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/echarts-all-3.js"></script>
+    </head>
+
+    <body style="height: 100%">
+        <b style="color: #B03A5B;font-size: 20px;height: 40px;line-height: 40px;">北邮校内论坛用户数</b>
+        <hr style="	border-top:1px ridge #cbcbcb;margin-top: 0px;margin-right: 3%;"/>
+
+        <div id="bupt" style="height: 800px;max-width: 97%;"></div>
+        <script type="text/javascript">
+            // 基于准备好的dom，初始化echarts实例
+            var myChart = echarts.init(document.getElementById('bupt'));
+
+            option = {
+                tooltip: {
+                    trigger: 'axis'
+                },
+                toolbox: {
+                    feature: {
+                        dataView: {show: true, readOnly: false},
+                        magicType: {show: true, type: ['line', 'bar']},
+                        restore: {show: true},
+                        saveAsImage: {show: true}
+                    }
+                },
+                legend: {
+                    data:['男生','女生','全部']
+                },
+                xAxis: [
+                    {
+                        type: 'category',
+                        data: ["学一", "学二", "学三", "学四", "学五", "学六", "学八", "学九", "学十", "学十一", "学十三",
+                            "学二十九", "创新大本营", "主楼", "明光楼", "新科研楼", "教一", "教二", "教三", "教四", "教九", "无线网"],
+                        axisLabel :{
+                                interval:0
+                            }
+                    }
+                ],
+                yAxis: [
+                    {
+                        type: 'value',
+                        name: '用户数'
+                    }
+                ],
+                series: [
+                    {
+                        name:'男生',
+                        type:'bar',
+                        data:{{ data_info|bupt_info:'boy' }}
+                    },
+                    {
+                        name:'女生',
+                        type:'bar',
+                        data:{{ data_info|bupt_info:'girl' }}
+                    },
+                    {
+                        name:'全部',
+                        type:'line',
+                        data:{{ data_info|bupt_info:'all' }}
+                    }
+                ]
+            };
+
+            myChart.setOption(option);
+        </script>
+
+    </body>
+</html>

@@ -30,15 +30,17 @@
         </div>
 
         <div id="left_menu">
-            <div id="left_menu_content_active" onclick="change(this)"><a href="/byrbbs/data?did=astro" target="dataframe">用户星座数据</a></div>
-            <div id="left_menu_content" onclick="change(this)"><a href="/byrbbs/data?did=china" target="dataframe">用户星座数据</a></div>
-            <div id="left_menu_content" onclick="change(this)"><a href="/byrbbs/data?did=world" target="dataframe">用户星座数据</a></div>
-            <div id="left_menu_content" onclick="change(this)"><a href="/byrbbs/data?did=astro" target="dataframe">用户星座数据</a></div>
+            <div id="left_menu_content_active" onclick="change(this)"><a href="/byrbbs/data?did=introduce" target="dataframe">论坛数据介绍</a></div>
             <hr id="left_menu_hr"/>
+            <div id="left_menu_content" onclick="change(this)"><a href="/byrbbs/data?did=bupt" target="dataframe">北邮用户分布</a></div>
+            <div id="left_menu_content" onclick="change(this)"><a href="/byrbbs/data?did=china" target="dataframe">全国用户分布</a></div>
+            <div id="left_menu_content" onclick="change(this)"><a href="/byrbbs/data?did=world" target="dataframe">世界用户分布</a></div>
+            <hr id="left_menu_hr"/>
+            <div id="left_menu_content" onclick="change(this)"><a href="/byrbbs/data?did=astro" target="dataframe">用户星座数据</a></div>
         </div>
 
         <div id="right_menu">
-            <iframe id="dataframe" name="dataframe"></iframe>
+            <iframe id="dataframe" name="dataframe" src="/byrbbs/data?did=introduce"></iframe>
         </div>
 
     </body>

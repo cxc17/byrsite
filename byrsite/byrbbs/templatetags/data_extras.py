@@ -77,3 +77,24 @@ def world_value(data_info):
         world.append({'name': k, 'value': v})
 
     return json.dumps(world, ensure_ascii=False)
+
+
+# 处理北邮用户数
+@register.filter
+def bupt_info(data_info, gender):
+    if gender == 'boy':
+        data_info = data_info[u'男生']
+    elif gender == 'girl':
+        data_info = data_info[u'女生']
+    else:
+        data_info = data_info[u'全部']
+    bupt_data = []
+    bupts = [u"学一", u"学二", u"学三", u"学四", u"学五", u"学六", u"学八", u"学九", u"学十", u"学十一", u"学十三", u"学二十九",
+             u"学十创新大本营", u"主楼", u"明光楼", u"新科研楼", u"教一", u"教二", u"教三", u"教四", u"教九", u"无线网"]
+    for bupt in bupts:
+        try:
+            bupt_data.append(data_info[bupt])
+        except:
+            bupt_data.append(0)
+    return bupt_data
+

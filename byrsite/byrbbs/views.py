@@ -322,18 +322,22 @@ def data(request):
     except:
         data_name = ""
 
-    if data_name in ['astro', 'china', 'world']:
+    if data_name in ['astro', 'china', 'world', 'bupt', 'introduce']:
         try:
             data_info = byr_data.objects.filter(data_name=data_name)
             data_info = json.loads(data_info[0].data_value)
         except:
             data_info = ""
         if data_name == 'astro':
-            return render(request, 'byrbbs/data_astro.html', {'data_info': data_info})
+            return render(request, 'byrbbs/data_type/data_astro.html', {'data_info': data_info})
         elif data_name == 'china':
-            return render(request, 'byrbbs/data_china.html', {'data_info': data_info})
+            return render(request, 'byrbbs/data_type/data_china.html', {'data_info': data_info})
         elif data_name == 'world':
-            return render(request, 'byrbbs/data_world.html', {'data_info': data_info})
+            return render(request, 'byrbbs/data_type/data_world.html', {'data_info': data_info})
+        elif data_name == 'bupt':
+            return render(request, 'byrbbs/data_type/data_bupt.html', {'data_info': data_info})
+        elif data_name == 'introduce':
+            return render(request, 'byrbbs/data_type/data_introduce.html')
 
     return render(request, 'byrbbs/data.html')
 
