@@ -1,0 +1,383 @@
+{% load staticfiles %}
+{% load data_extras %}
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>北邮人论坛数据</title>
+        <link rel="icon" sizes="any" mask="" href="{% static 'byrbbs/images/logo_title.png' %}">
+        <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/echarts-all-3.js"></script>
+    </head>
+
+    <body style="height: 100%">
+        <b style="color: #B03A5B;font-size: 20px;height: 40px;line-height: 40px;">用户发帖时间分布</b>
+        <hr style="	border-top:1px ridge #cbcbcb;margin-top: 0px;margin-right: 3%;"/>
+
+        <div id="post_date" style="height: 600px;max-width: 97%;"></div>
+        <script type="text/javascript">
+            // 基于准备好的dom，初始化echarts实例
+            var myChart = echarts.init(document.getElementById('post_date'));
+
+            option = {
+                title: {
+                    text: '用户发帖时间分布',
+                    x: 'center'
+                },
+                tooltip: {
+                    trigger: 'axis',
+                    axisPointer: {
+                        animation: false
+                    }
+                },
+                legend: {
+                    data:['发帖数'],
+                    x: 'left'
+                },
+                toolbox: {
+                    feature: {
+                        dataZoom: {
+                            yAxisIndex: 'none'
+                        },
+                        restore: {},
+                        saveAsImage: {}
+                    }
+                },
+                dataZoom: [
+                    {
+{#                        type: 'inside',#}
+                        show: true,
+                        realtime: true,
+                        start: 70,
+                        end: 100
+                    }
+                ],
+                xAxis : [
+                    {
+                        name : '日期',
+                        type : 'category',
+                        boundaryGap : false,
+                        axisLine: {onZero: true},
+                        data: {{ data_info|post_date:"post_date" |safe}}
+                    }
+                ],
+                yAxis : [
+                    {
+                        name : '数量',
+                        type : 'value'
+                    }
+                ],
+                series : [
+                    {
+                        name:'发帖数',
+                        type:'line',
+                        symbolSize: 5,
+                        hoverAnimation: false,
+                        data: {{ data_info|post_date:"post_date_num" }}
+                    }
+                ]
+            };
+
+            myChart.setOption(option);
+        </script>
+
+
+        <div id="post_hour" style="height: 600px;max-width: 97%;"></div>
+        <script type="text/javascript">
+            // 基于准备好的dom，初始化echarts实例
+            var myChart = echarts.init(document.getElementById('post_hour'));
+
+            option = {
+                tooltip: {
+                    trigger: 'axis'
+                },
+                toolbox: {
+                    feature: {
+                        dataView: {show: true, readOnly: false},
+                        magicType: {show: true, type: ['line', 'bar']},
+                        restore: {show: true},
+                        saveAsImage: {show: true}
+                    }
+                },
+                legend: {
+                    data:['男生','女生','全部']
+                },
+                xAxis: [
+                    {
+                        name : '时间',
+                        type: 'category',
+                        data: ['0:00', '1:00', '2:00', '3:00', '4:00', '5:00', '6:00', '7:00', '8:00', '9:00', '10:00',
+                            '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00', '21:00', '22:00', '23:00'],
+                        axisLabel :{
+                                interval:0
+                            }
+                    }
+                ],
+                yAxis: [
+                    {
+                        type: 'value',
+                        name: '数量'
+                    }
+                ],
+                series: [
+                    {
+                        name:'男生',
+                        type:'bar',
+                        data:{% post_num data_info 'post_hour_num' 'boy' %}
+                    },
+                    {
+                        name:'女生',
+                        type:'bar',
+                        data:{% post_num data_info 'post_hour_num' 'girl' %}
+                    },
+                    {
+                        name:'全部',
+                        type:'line',
+                        data:{% post_num data_info 'post_hour_num' 'all' %}
+                    }
+                ]
+            };
+
+            myChart.setOption(option);
+        </script>
+
+
+        <div id="post_weekday" style="height: 600px;max-width: 97%;"></div>
+        <script type="text/javascript">
+            // 基于准备好的dom，初始化echarts实例
+            var myChart = echarts.init(document.getElementById('post_weekday'));
+
+            option = {
+                tooltip: {
+                    trigger: 'axis'
+                },
+                toolbox: {
+                    feature: {
+                        dataView: {show: true, readOnly: false},
+                        magicType: {show: true, type: ['line', 'bar']},
+                        restore: {show: true},
+                        saveAsImage: {show: true}
+                    }
+                },
+                legend: {
+                    data:['男生','女生','全部']
+                },
+                xAxis: [
+                    {
+                        name : '星期',
+                        type: 'category',
+                        data: ['星期一','星期二','星期三','星期四','星期五','星期六','星期日'],
+                        axisLabel :{
+                                interval:0
+                            }
+                    }
+                ],
+                yAxis: [
+                    {
+                        type: 'value',
+                        name: '数量'
+                    }
+                ],
+                series: [
+                    {
+                        name:'男生',
+                        type:'bar',
+                        data:{% post_num data_info 'post_weekday_num' 'boy' %}
+                    },
+                    {
+                        name:'女生',
+                        type:'bar',
+                        data:{% post_num data_info 'post_weekday_num' 'girl' %}
+                    },
+                    {
+                        name:'全部',
+                        type:'line',
+                        data:{% post_num data_info 'post_weekday_num' 'all' %}
+                    }
+                ]
+            };
+
+            myChart.setOption(option);
+        </script>
+
+
+        <div id="post_day" style="height: 600px;max-width: 97%;"></div>
+        <script type="text/javascript">
+            // 基于准备好的dom，初始化echarts实例
+            var myChart = echarts.init(document.getElementById('post_day'));
+
+            option = {
+                tooltip: {
+                    trigger: 'axis'
+                },
+                toolbox: {
+                    feature: {
+                        dataView: {show: true, readOnly: false},
+                        magicType: {show: true, type: ['line', 'bar']},
+                        restore: {show: true},
+                        saveAsImage: {show: true}
+                    }
+                },
+                legend: {
+                    data:['男生','女生','全部']
+                },
+                xAxis: [
+                    {
+                        name : '日期',
+                        type: 'category',
+                        data: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16',
+                            '17', '18', '19', '20', '21', '22', '23', '24', '25', '26', '27', '28', '29', '30', '31'],
+                        axisLabel :{
+                                interval:0
+                            }
+                    }
+                ],
+                yAxis: [
+                    {
+                        type: 'value',
+                        name: '数量'
+                    }
+                ],
+                series: [
+                    {
+                        name:'男生',
+                        type:'bar',
+                        data:{% post_num data_info 'post_day_num' 'boy' %}
+                    },
+                    {
+                        name:'女生',
+                        type:'bar',
+                        data:{% post_num data_info 'post_day_num' 'girl' %}
+                    },
+                    {
+                        name:'全部',
+                        type:'line',
+                        data:{% post_num data_info 'post_day_num' 'all' %}
+                    }
+                ]
+            };
+
+            myChart.setOption(option);
+        </script>
+
+
+        <div id="post_month" style="height: 600px;max-width: 97%;"></div>
+        <script type="text/javascript">
+            // 基于准备好的dom，初始化echarts实例
+            var myChart = echarts.init(document.getElementById('post_month'));
+
+            option = {
+                tooltip: {
+                    trigger: 'axis'
+                },
+                toolbox: {
+                    feature: {
+                        dataView: {show: true, readOnly: false},
+                        magicType: {show: true, type: ['line', 'bar']},
+                        restore: {show: true},
+                        saveAsImage: {show: true}
+                    }
+                },
+                legend: {
+                    data:['男生','女生','全部']
+                },
+                xAxis: [
+                    {
+                        name : '月份',
+                        type: 'category',
+                        data: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'],
+                        axisLabel :{
+                                interval:0
+                            }
+                    }
+                ],
+                yAxis: [
+                    {
+                        type: 'value',
+                        name: '数量'
+                    }
+                ],
+                series: [
+                    {
+                        name:'男生',
+                        type:'bar',
+                        data:{% post_num data_info 'post_month_num' 'boy' %}
+                    },
+                    {
+                        name:'女生',
+                        type:'bar',
+                        data:{% post_num data_info 'post_month_num' 'girl' %}
+                    },
+                    {
+                        name:'全部',
+                        type:'line',
+                        data:{% post_num data_info 'post_month_num' 'all' %}
+                    }
+                ]
+            };
+
+            myChart.setOption(option);
+        </script>
+
+
+        <div id="post_yaer" style="height: 600px;max-width: 97%;"></div>
+        <script type="text/javascript">
+            // 基于准备好的dom，初始化echarts实例
+            var myChart = echarts.init(document.getElementById('post_yaer'));
+
+            option = {
+                tooltip: {
+                    trigger: 'axis'
+                },
+                toolbox: {
+                    feature: {
+                        dataView: {show: true, readOnly: false},
+                        magicType: {show: true, type: ['line', 'bar']},
+                        restore: {show: true},
+                        saveAsImage: {show: true}
+                    }
+                },
+                legend: {
+                    data:['男生','女生','全部']
+                },
+                xAxis: [
+                    {
+                        name : '年份',
+                        type: 'category',
+                        data: ['2004', '2005', '2006', '2007', '2008', '2009', '2010', '2011', '2012', '2013', '2014', '2015', '2016'],
+                        axisLabel :{
+                                interval:0
+                            }
+                    }
+                ],
+                yAxis: [
+                    {
+                        type: 'value',
+                        name: '数量'
+                    }
+                ],
+                series: [
+                    {
+                        name:'男生',
+                        type:'bar',
+                        data:{% post_num data_info 'post_year_num' 'all' %}
+                    },
+                    {
+                        name:'女生',
+                        type:'bar',
+                        data:{% post_num data_info 'post_year_num' 'all' %}
+                    },
+                    {
+                        name:'全部',
+                        type:'line',
+                        data:{% post_num data_info 'post_year_num' 'all' %}
+                    }
+                ]
+            };
+
+            myChart.setOption(option);
+        </script>
+    </body>
+</html>

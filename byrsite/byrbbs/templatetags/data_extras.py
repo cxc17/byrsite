@@ -98,3 +98,40 @@ def bupt_info(data_info, gender):
             bupt_data.append(0)
     return bupt_data
 
+
+# 获取发帖日期列表
+@register.filter
+def post_date(data_info, tp):
+    return json.dumps(data_info[tp], ensure_ascii=False)
+
+
+# 获取各类型时间发帖数量
+@register.simple_tag
+def post_num(data_info, tp, gender):
+    if gender == 'boy':
+        post_day_num = data_info[tp][u'男生']
+    elif gender == 'girl':
+        post_day_num = data_info[tp][u'女生']
+    else:
+        post_day_num = data_info[tp][u'全部']
+
+    return post_day_num
+
+
+# 获取跟帖日期列表
+@register.filter
+def comment_date(data_info, tp):
+    return json.dumps(data_info[tp], ensure_ascii=False)
+
+
+# 获取各类型时间跟帖数量
+@register.simple_tag
+def comment_num(data_info, tp, gender):
+    if gender == 'boy':
+        comment_day_num = data_info[tp][u'男生']
+    elif gender == 'girl':
+        comment_day_num = data_info[tp][u'女生']
+    else:
+        comment_day_num = data_info[tp][u'全部']
+
+    return comment_day_num

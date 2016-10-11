@@ -322,7 +322,7 @@ def data(request):
     except:
         data_name = ""
 
-    if data_name in ['astro', 'china', 'world', 'bupt', 'introduce']:
+    if data_name in ['astro', 'china', 'world', 'bupt', 'introduce', 'post', 'comment']:
         try:
             data_info = byr_data.objects.filter(data_name=data_name)
             data_info = json.loads(data_info[0].data_value)
@@ -336,6 +336,10 @@ def data(request):
             return render(request, 'byrbbs/data_type/data_world.html', {'data_info': data_info})
         elif data_name == 'bupt':
             return render(request, 'byrbbs/data_type/data_bupt.html', {'data_info': data_info})
+        elif data_name == 'post':
+            return render(request, 'byrbbs/data_type/data_post.html', {'data_info': data_info})
+        elif data_name == 'comment':
+            return render(request, 'byrbbs/data_type/data_comment.html', {'data_info': data_info})
         elif data_name == 'introduce':
             return render(request, 'byrbbs/data_type/data_introduce.html')
 
