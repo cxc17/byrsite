@@ -292,7 +292,7 @@ def user(request):
         user_info = user_info[0]
     except:
         url = "https://bbs.byr.cn/user/query/%s.json" % user_id
-        req = urllib2.Request(url, headers={'cookie': 'nforum[UTMPUSERID]=byrsearch; nforum[PASSWORD]=vMl0XLo6aU1giZLnCQ3Yyw%3D%3D;',
+        req = urllib2.Request(url, headers={'cookie': 'nforum[UTMPUSERID]=byrsearch; nforum[PASSWORD]=BtdtuHp0XFn0LO4gXsV9zw%3D%3D;',
                                             'x-requested-with': 'XMLHttpRequest'})
         info = urllib2.urlopen(req).read()
         try:
