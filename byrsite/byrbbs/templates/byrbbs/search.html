@@ -113,7 +113,7 @@
                 {% for result in search_result %}
                     <div class="list box">
                         <h4>
-                            <a href={{ result.url }} target="_blank">{{ result.title}}</a>
+                            <a href={{ result.url }} target="_blank">{{ result.title|content_output_max:key|safe}}</a>
                         </h4>
                         <br/>
                         <div>
@@ -135,7 +135,7 @@
                             </span>
                         </div>
                         <br/>
-                        <p>{{ result.content|content_output_max}}</p>
+                        <p>{{ result.content|content_output_max:key|safe}}</p>
                     </div>
                 {% endfor %}
             <br/>

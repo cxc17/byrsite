@@ -1,8 +1,11 @@
 # coding: utf-8
 
+from django.db.models import Q
 from django import template
+import jieba
 import re
 
+from byrbbs.models import byr_stop_word
 
 register = template.Library()
 
@@ -29,23 +32,70 @@ def page_list_next(page, page_max):
 
 # 返回最多200字节的内容
 @register.filter
-def content_output_max(content):
+def content_output_max(content, key):
+    keys_info = list(jieba.cut(key))
     if len(content) < 200:
+        for key_info in keys_info:
+            if key_info == " " or key_info == u" ":
+                continue
+            if re.findall(r"^\w+$", key_info):
+                content = re.sub(r"(\W)(%s)(\W)" % key_info, "\g<1><b>\g<2></b>\g<3>", content, flags=re.I)
+            else:
+                content = re.sub(key_info, "<b>%s</b>" % key_info, content, flags=re.I)
         return content
-    else:
-        return content[:200] + u" ..."
+    # 停用词
+    stop_word = byr_stop_word.objects.filter(Q(id=2742))[0].word
+
+    key_info_normal = []
+    key_info_stop = []
+    for i in keys_info:
+        if i in stop_word:
+            key_info_stop.append(i)
+        else:
+            key_info_normal.append(i)
+
+    num = -1
+    for key_info in key_info_normal:
+        if key_info == " " or key_info == u" ":
+            continue
+        if re.findall(r"^\w+$", key_info):
+            try:
+                num = max(0, re.search(r"\W%s\W" % key_info, content, re.I).span()[0]-10)
+            except:
+                num = 0
+        else:
+            num = content.find(key_info)
+        if num != -1:
+            break
+    if num == -1:
+        for key_info in key_info_stop:
+            if key_info == " " or key_info == u" ":
+                continue
+            if re.findall(r"^\w+$", key_info):
+                try:
+                    num = max(0, re.search(r"\W%s\W" % key_info, content, re.I).span()[0]-10)
+                except:
+                    num = 0
+            else:
+                num = content.find(key_info)
+            if num != -1:
+                break
+
+    content = content[num:num+200] + u" ..."
+    for key_info in keys_info:
+        if key_info == " " or key_info == u" ":
+            continue
+        if re.findall(r"^\w+$", key_info):
+            content = re.sub(r"(\W)(%s)(\W)" % key_info, "\g<1><b>\g<2></b>\g<3>", content, flags=re.I)
+        else:
+            content = re.sub(key_info, "<b>%s</b>" % key_info, content, flags=re.I)
+    return content
 
 
 # 对输出的内容进行整理,如果含有关键字进行提取切分
 @register.filter
 def search_key(content, key):
-    if len(content) < 200:
-        content = content
-    else:
-        content = content[:200] + u" ..."
-
     content_iter = re.finditer("%s" % key, content, re.I)
-
     result = ""
     start = 0
     for citer in content_iter:
@@ -53,7 +103,6 @@ def search_key(content, key):
         result += content[start:end]
         result = result + '<b>' + content[citer.start():citer.end()] + '</b>'
         start = citer.end()
-
     result += content[start:]
     return result
 
@@ -61,7 +110,7 @@ def search_key(content, key):
 # 关键字判断
 @register.filter
 def judge_key(content, key):
-    return re.match("%s" %key, content, re.I)
+    return re.match("%s" % key, content, re.I)
 
 
 # 对搜索时间进行

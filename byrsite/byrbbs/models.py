@@ -2,8 +2,6 @@ from __future__ import unicode_literals
 
 from django.db import models
 
-# Create your models here.
-
 
 class byr_board(models.Model):
     board_name = models.CharField(max_length=255)
@@ -23,7 +21,6 @@ class byr_post(models.Model):
     post_num = models.IntegerField()
     publish_time = models.DateTimeField(blank=True)
     last_time = models.DateTimeField(blank=True)
-    # insert_time = models.DateTimeField
 
     class Meta:
         db_table = 'post'
@@ -37,7 +34,6 @@ class byr_comment(models.Model):
     user_id = models.CharField(max_length=13)
     user_name = models.CharField(max_length=40)
     publish_time = models.DateTimeField(blank=True)
-    # insert_time = models.DateTimeField
 
     class Meta:
         db_table = 'comment'
@@ -46,6 +42,8 @@ class byr_comment(models.Model):
 class byr_user(models.Model):
     user_id = models.CharField(max_length=255)
     user_name = models.CharField(max_length=255)
+    post_num = models.IntegerField()
+    comment_num = models.IntegerField()
     gender = models.CharField(max_length=255)
     astro = models.CharField(max_length=255)
     qq = models.CharField(max_length=255)
@@ -75,3 +73,18 @@ class byr_data(models.Model):
     class Meta:
         db_table = 'data'
 
+
+class byr_index(models.Model):
+    word = models.CharField(max_length=255)
+    doc_fre = models.IntegerField()
+    data_value = models.TextField(blank=True)
+
+    class Meta:
+        db_table = 'post_index'
+
+
+class byr_stop_word(models.Model):
+    word = models.CharField(max_length=255)
+
+    class Meta:
+        db_table = 'stop_word'
