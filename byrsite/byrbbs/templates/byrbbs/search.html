@@ -46,27 +46,27 @@
             </div>
 
             <div id="header-navigation">
-                <div class="{{ type|menu_type:"all" }}"><a href="/byrbbs/?key={{ key }}&type=all">全部</a></div>
-                <div class="{{ type|menu_type:"user" }}"><a href="/byrbbs/?key={{ key }}&type=user">用户</a></div>
+                <div class="{{ type|menu_type:"all" }}"><a href="/byrbbs/?key={{ key|urlencode }}&type=all">全部</a></div>
+                <div class="{{ type|menu_type:"user" }}"><a href="/byrbbs/?key={{ key|urlencode }}&type=user">用户</a></div>
                 <div class="{{ type|menu_type:"data" }}"><a href="/byrbbs/data">数据</a></div>
 
                 <div class="btn-group">
                     <div id="menu1" data-toggle="dropdown">{{ date|date_type }}<span class="caret"></span></div>
                     <ul class="dropdown-menu">
                         <li>
-                            <a href="/byrbbs/?key={{ key }}&date=all">时间不限</a>
+                            <a href="/byrbbs/?key={{ key|urlencode }}&date=all">时间不限</a>
                         </li>
                         <li>
-                            <a href="/byrbbs/?key={{ key }}&date=1&search_type=exact">一天内</a>
+                            <a href="/byrbbs/?key={{ key|urlencode }}&date=1&search_type=exact">一天内</a>
                         </li>
                         <li>
-                            <a href="/byrbbs/?key={{ key }}&date=7&search_type=exact">一周内</a>
+                            <a href="/byrbbs/?key={{ key|urlencode }}&date=7&search_type=exact">一周内</a>
                         </li>
                         <li>
-                            <a href="/byrbbs/?key={{ key }}&date=30&search_type=exact">一月内</a>
+                            <a href="/byrbbs/?key={{ key|urlencode }}&date=30&search_type=exact">一月内</a>
                         </li>
                         <li>
-                            <a href="/byrbbs/?key={{ key }}&date=365&search_type=exact">一年内</a>
+                            <a href="/byrbbs/?key={{ key|urlencode }}&date=365&search_type=exact">一年内</a>
                         </li>
                     </ul>
                 </div>
@@ -75,10 +75,10 @@
                     <div id="menu1" data-toggle="dropdown">{{ search_type|search_type }}<span class="caret"></span></div>
                     <ul class="dropdown-menu">
                         <li>
-                            <a href="/byrbbs/?key={{ key }}&search_type=all">所有结果</a>
+                            <a href="/byrbbs/?key={{ key|urlencode }}&search_type=all">所有结果</a>
                         </li>
                         <li>
-                            <a href="/byrbbs/?key={{ key }}&search_type=exact">精确匹配</a>
+                            <a href="/byrbbs/?key={{ key|urlencode }}&search_type=exact">精确匹配</a>
                         </li>
                     </ul>
                 </div>

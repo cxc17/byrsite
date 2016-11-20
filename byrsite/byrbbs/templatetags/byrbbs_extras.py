@@ -38,10 +38,10 @@ def content_output_max(content, key):
         for key_info in keys_info:
             if key_info == " " or key_info == u" ":
                 continue
-            if re.findall(r"^\w+$", key_info):
+            if re.findall(r"^\w$", key_info):
                 content = re.sub(r"(\W)(%s)(\W)" % key_info, "\g<1><b>\g<2></b>\g<3>", content, flags=re.I)
             else:
-                content = re.sub(key_info, "<b>%s</b>" % key_info, content, flags=re.I)
+                content = re.sub(re.escape("%s" % key_info), "<b>%s</b>" % key_info, content, flags=re.I)
         return content
     # 停用词
     stop_word = byr_stop_word.objects.filter(Q(id=2742))[0].word
@@ -88,14 +88,14 @@ def content_output_max(content, key):
         if re.findall(r"^\w+$", key_info):
             content = re.sub(r"(\W)(%s)(\W)" % key_info, "\g<1><b>\g<2></b>\g<3>", content, flags=re.I)
         else:
-            content = re.sub(key_info, "<b>%s</b>" % key_info, content, flags=re.I)
+            content = re.sub(re.escape("%s" % key_info), "<b>%s</b>" % key_info, content, flags=re.I)
     return content
 
 
 # 对输出的内容进行整理,如果含有关键字进行提取切分
 @register.filter
 def search_key(content, key):
-    content_iter = re.finditer("%s" % key, content, re.I)
+    content_iter = re.finditer(re.escape("%s" % key), content, re.I)
     result = ""
     start = 0
     for citer in content_iter:
