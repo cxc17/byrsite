@@ -17,20 +17,20 @@
         <link rel="stylesheet" href="{% static 'byrbbs/search_style.css' %}">
     </head>
 
-    <script>
-        $(document).ready(function(){
-            $("#UserModal").on("hidden.bs.modal", function() {
-                $(this).removeData("bs.modal");
-            });
-        });
-
-        $(function() {
-            //阻止点击label由于事件传递的原因收起菜单
-            $(".dropdown-menu").on("click", "[data-stopPropagation]", function(e) {
-                e.stopPropagation();
-            });
-        });
-    </script>
+{#    <script>#}
+{#        $(document).ready(function(){#}
+{#            $("#UserModal").on("hidden.bs.modal", function() {#}
+{#                $(this).removeData("bs.modal");#}
+{#            });#}
+{#        });#}
+{##}
+{#        $(function() {#}
+{#            //阻止点击label由于事件传递的原因收起菜单#}
+{#            $(".dropdown-menu").on("click", "[data-stopPropagation]", function(e) {#}
+{#                e.stopPropagation();#}
+{#            });#}
+{#        });#}
+{#    </script>#}
 
     <body>
         <div style="position: relative; min-height:100%; ">
@@ -82,9 +82,7 @@
                         </li>
                     </ul>
                 </div>
-
             </div>
-
         </div>
 
         <div class="container">
@@ -98,7 +96,7 @@
                         {% endif %}
                     </p>
                 </div>
-                {% if search_count == 0%}
+                {% if search_count == 0 %}
                     <div class="list box">
                         <p style="padding-top:.33em"> 抱歉，没有找到和您查询的"<b>{{ key }}</b>"相符的内容。</p>
                         <p style="margin-top:1em">建议：
@@ -108,6 +106,38 @@
                             <li>请改用较常见的字词。</li>
                         </ul>
                     </div>
+                {% endif %}
+
+                {% if page == 1 %}
+                    {% for result in user_info %}
+                        <div class="list box">
+                            <h4>
+                                <a href="/byrbbs/user?uid={{ result.user_id }}" target="_blank">
+                                    {{ result.user_id|user_key:key|safe }}({{ result.user_name|user_key:key|safe }})_论坛百科
+                                </a>
+                            </h4>
+                            <br/>
+                            <div>
+                                <div class="col-md-3 column">
+                                    <img width={{ result.face_width|image_length }}px height={{ result.face_height|image_length }}px src={{ result.face_url }} />
+                                </div>
+                                <div class="col-md-9 column">
+                                    <dl>
+                                        <dd>昵 称:&nbsp;&nbsp;&nbsp;{{ result.user_name }}</dd>
+                                        <dd>性 别:&nbsp;&nbsp;&nbsp;{{ result.gender }}</dd>
+                                        <dd>星 座:&nbsp;&nbsp;&nbsp;{{ result.astro }}</dd>
+                                        <dd>论坛等级:&nbsp;&nbsp;&nbsp;{{ result.level }}</dd>
+                                        <dd>帖子总数:&nbsp;&nbsp;&nbsp;{{ result.post_count }}篇</dd>
+                                        <dd>积分:&nbsp;&nbsp;&nbsp;{{ result.score }}</dd>
+                                        <dd>生命力:&nbsp;&nbsp;&nbsp;{{ result.life }}</dd>
+                                        <dd>上次登录:&nbsp;&nbsp;&nbsp;{{ result.last_login_time }}</dd>
+                                        <dd>最后访问IP:&nbsp;&nbsp;&nbsp;{{ result.last_login_ip }}({{ result|last_site }})</dd>
+                                        <dd>当前状态:&nbsp;&nbsp;&nbsp;{{ result.status }}</dd>
+                                    </dl>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
                 {% endif %}
 
                 {% for result in search_result %}
@@ -127,7 +157,8 @@
                                     跟帖者：
                                 {% endif %}
                             </span>
-                            <a href="/byrbbs/user?uid={{ result.user_id }}" data-toggle="modal" data-target="#UserModal">
+                            <a href="/byrbbs/user?uid={{ result.user_id }}" target="_blank">
+{#                                data-toggle="modal" data-target="#UserModal">#}
                                 {{ result.user_id|search_key:key|safe }}({{ result.user_name|search_key:key|safe }})
                             </a>
                             <span>
@@ -160,7 +191,6 @@
                     {% endif %}
                 </div>
                 {% endif %}
-
             <br/>
             </div>
         </div>
@@ -172,13 +202,13 @@
         </div>
 
         {# 用户信息模态框 #}
-        <div class="modal fade" id="UserModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" >
-            <div class="modal-dialog">
-                <div class="modal-content">
-
-                </div><!-- /.modal-content -->
-            </div><!-- /.modal -->
-        </div>
+{#        <div class="modal fade" id="UserModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" >#}
+{#            <div class="modal-dialog">#}
+{#                <div class="modal-content">#}
+{##}
+{#                </div><!-- /.modal-content -->#}
+{#            </div><!-- /.modal -->#}
+{#        </div>#}
 
         </div>
     </body>

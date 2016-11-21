@@ -1,60 +1,142 @@
 {% load staticfiles %}
-{% load byrbbs_extras %}
+{% load user_extras %}
 
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>{{ user_id }}_用户搜索</title>
-    <link rel="stylesheet" href="{% static 'byrbbs/userInfo_style.css' %}">
-</head>
-<body>
-    <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
-            &times;
-        </button>
-        <h5 class="modal-title" id="myModalLabel">
-            用户信息
-        </h5>
-    </div>
-	<div class="row clearfix">
-        <div class="bbs_header">
-            <span class="bbs_span">{{ user_id }}</span> 发问候信 | 加为好友
-            <br/>
-            <span>基本信息</span>
+    <head>
+        <meta charset="UTF-8">
+        <title>{{ user_id }}_论坛百科</title>
+        <link rel="icon" sizes="any" mask="" href="{% static 'byrbbs/images/logo_title.png' %}">
+        <link href="http://apps.bdimg.com/libs/bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet" />
+        <link rel="stylesheet" href="{% static 'byrbbs/userInfo_style.css' %}">
+        <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/echarts-all-3.js"></script>
+    </head>
+    <body>
+        <div id="header">
+            <div id="header-brand">
+                <a href="/byrbbs"><img src="{% static 'byrbbs/images/logo.png' %}"  width="100" height="28"></a>
+                <div id="menu_total_active"><a href="/byrbbs/?type=user">用户</a></div>
+                <div id="menu_total"><a href="/byrbbs/data">数据</a></div>
+                <div id="menu_total"><a href="/byrbbs/">首页</a></div>
+            </div>
         </div>
-        <HR  width="94%" color=#987cb9>
-        <div class="col-md-3 column">
-            <img width={{ user_info.face_width|image_length }}px height={{ user_info.face_height|image_length }}px src={{ user_info.face_url }} />
+        <div id='user_content'>
+            <div class="modal-header">
+                <h3 class="modal-title" id="myModalLabel">{{ user_id }}({{ user_info.user_name }})</h3>
+            </div>
+
+            <div class="row">
+                <div class="col-md-12 column">
+                    <br><span id="headline-1">基本信息</span><br><br>
+                </div>
+                <HR  width="94%" color=#987cb9>
+                <div class="col-md-3 column">
+                    <img width={{ user_info.face_width|image_length }}px height={{ user_info.face_height|image_length }}px src={{ user_info.face_url }} />
+                </div>
+                <div class="col-md-9 column">
+                    <dl>
+                        <dd>昵 称:&nbsp;&nbsp;{{ user_info.user_name }}</dd>
+                        <dd>性 别:&nbsp;&nbsp;{{ user_info.gender }}</dd>
+                        <dd>星 座:&nbsp;&nbsp;{{ user_info.astro }}</dd>
+                        <dd>&nbsp;&nbsp;QQ:&nbsp;&nbsp;{{ user_info.qq }}</dd>
+                        <dd> MSN:&nbsp;&nbsp;{{ user_info.msn }}</dd>
+                        <dd>主 页:&nbsp;&nbsp;{{ user_info.home_page }}</dd>
+                    </dl>
+                </div>
+                <div class="col-md-12 column">
+                    <span class="bbs_span">论坛属性</span>
+                </div>
+                <HR  width="94%" color=#987cb9>
+                <div class="col-md-12 column">
+                    <dl>
+                        <dd id="bbs_art">论坛等级:&nbsp;&nbsp;&nbsp;{{ user_info.level }}</dd>
+                        <dd id="bbs_art">帖子总数:&nbsp;&nbsp;&nbsp;{{ user_info.post_count }}篇</dd>
+                        <dd id="bbs_art">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;积分:&nbsp;&nbsp;&nbsp;{{ user_info.score }}</dd>
+                        <dd id="bbs_art">&nbsp;&nbsp;&nbsp;生命力:&nbsp;&nbsp;&nbsp;{{ user_info.life }}</dd>
+                        <dd id="bbs_art">上次登录:&nbsp;&nbsp;&nbsp;{{ user_info.last_login_time }}</dd>
+                        <dd>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;最后访问IP:&nbsp;&nbsp;&nbsp;{{ user_info.last_login_ip }}({{ user_info|last_site }})</dd>
+                        <dd id="bbs_art">当前状态:&nbsp;&nbsp;&nbsp;{{ user_info.status }}</dd>
+                    </dl>
+                </div>
+
+                <div class="col-md-12 column">
+                    <br><span id="headline-1">用户数据</span><br><br>
+                </div>
+                <HR  width="94%" color=#987cb9>
+                <div class="col-md-12 column">
+                    <div id="post_date" style="height: 400px; max-width: 85%;"></div>
+                    <script type="text/javascript">
+                        // 基于准备好的dom，初始化echarts实例
+                        var myChart = echarts.init(document.getElementById('post_date'));
+
+                        option = {
+                            title: {
+                                text: '用户发帖时间分布',
+                                x: 'center'
+                            },
+                            tooltip: {
+                                trigger: 'axis',
+                                axisPointer: {
+                                    animation: false
+                                }
+                            },
+                            legend: {
+                                data:['发帖数'],
+                                x: 'left'
+                            },
+                            toolbox: {
+                                feature: {
+                                    dataZoom: {
+                                        yAxisIndex: 'none'
+                                    },
+                                    restore: {},
+                                    saveAsImage: {}
+                                }
+                            },
+                            dataZoom: [
+                                {
+            {#                        type: 'inside',#}
+                                    show: true,
+                                    realtime: true,
+                                    start: 0,
+                                    end: 100
+                                }
+                            ],
+                            xAxis : [
+                                {
+                                    name : '日期',
+                                    type : 'category',
+                                    boundaryGap : false,
+                                    axisLine: {onZero: true},
+                                    data: {{ post|post_date:"post_date"|safe}}
+                                }
+                            ],
+                            yAxis : [
+                                {
+                                    name : '数量',
+                                    type : 'value'
+                                }
+                            ],
+                            series : [
+                                {
+                                    name:'发帖数',
+                                    type:'line',
+                                    symbolSize: 5,
+                                    hoverAnimation: false,
+                                    data: {{ post|post_date:"post_date_num" }}
+                                }
+                            ]
+                        };
+                        myChart.setOption(option);
+                    </script>
+
+
+
+
+
+                </div>
+
+            </div>
         </div>
-        <div class="col-md-9 column">
-            <dl>
-                <dd>昵 称:&nbsp;&nbsp;{{ user_info.user_name }}</dd>
-                <dd>性 别:&nbsp;&nbsp;{{ user_info.gender }}</dd>
-                <dd>星 座:&nbsp;&nbsp;{{ user_info.astro }}</dd>
-                <dd>&nbsp;&nbsp;QQ:&nbsp;&nbsp;{{ user_info.qq }}</dd>
-                <dd> MSN:&nbsp;&nbsp;{{ user_info.msn }}</dd>
-                <dd>主 页:&nbsp;&nbsp;{{ user_info.home_page }}</dd>
-            </dl>
-        </div>
-        <div class="col-md-12 column">
-            <span class="bbs_span">论坛属性</span>
-        </div>
-        <HR  width="94%" color=#987cb9>
-        <div class="col-md-12 column">
-            <dl>
-                <dd id="bbs_art">论坛等级:&nbsp;&nbsp;&nbsp;{{ user_info.level }}</dd>
-                <dd id="bbs_art">帖子总数:&nbsp;&nbsp;&nbsp;{{ user_info.post_count }}篇</dd>
-                <dd id="bbs_art">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;积分:&nbsp;&nbsp;&nbsp;{{ user_info.score }}</dd>
-                <dd id="bbs_art">&nbsp;&nbsp;&nbsp;生命力:&nbsp;&nbsp;&nbsp;{{ user_info.life }}</dd>
-                <dd id="bbs_art">上次登录:&nbsp;&nbsp;&nbsp;{{ user_info.last_login_time }}</dd>
-                <dd>&nbsp;最后访问IP:&nbsp;&nbsp;&nbsp;{{ user_info.last_login_ip }}</dd>
-                <dd id="bbs_art">当前状态:&nbsp;&nbsp;&nbsp;{{ user_info.status }}</dd>
-            </dl>
-        </div>
-    </div>
-    <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-    </div>
-</body>
+    </body>
 </html>

@@ -107,6 +107,23 @@ def search_key(content, key):
     return result
 
 
+# 用户大写
+@register.filter
+def user_key(content, key):
+    if content.lower() == key.lower():
+        return '<b>' + content + '</b>'
+    return content
+
+
+# 用户登录地点
+@register.filter
+def last_site(result):
+    if result.last_login_bupt != '':
+        return u"北邮" + result.last_login_bupt
+    else:
+        return result.country_cn + result.province
+
+
 # 关键字判断
 @register.filter
 def judge_key(content, key):

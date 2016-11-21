@@ -57,6 +57,9 @@ class byr_user(models.Model):
     last_login_time = models.DateTimeField(blank=True)
 
     last_login_ip = models.CharField(max_length=255)
+    country_cn = models.CharField(max_length=255)
+    province = models.CharField(max_length=255)
+    last_login_bupt = models.CharField(max_length=255)
     status = models.CharField(max_length=255)
     face_url = models.CharField(max_length=255)
     face_height = models.FloatField()

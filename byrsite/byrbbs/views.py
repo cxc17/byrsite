@@ -351,6 +351,9 @@ def search(request):
     if search_type == 'exact':
         return search_exact(request, key, page, web_type, search_type, web_date, start_time)
 
+    # 用户匹配
+    user_info = byr_user.objects.filter(Q(user_id=key) | Q(user_name=key))
+
     # 精确匹配数目
     post_result = byr_post.objects.filter(Q(user_id=key) | Q(user_name=key)).order_by("-publish_time")
     post_count = post_result.count()
@@ -395,10 +398,11 @@ def search(request):
         # 搜索结束时间
         end_time = time.time()
         search_time = end_time - start_time
+        search_count += user_info.count()
         response = render(request, 'byrbbs/search.html', {"key": key, "page": page, "search_time": search_time,
-                                                          "search_result": search_result, "page_max": page_max,
-                                                          "search_count": search_count, "type": web_type,
-                                                          "date": web_date, 'search_type': search_type})
+                                                          "search_result": search_result, 'user_info': user_info,
+                                                          "search_count": search_count, 'search_type': search_type,
+                                                          "type": web_type, "date": web_date, "page_max": page_max})
 
         response.set_cookie('type', 'user')
         return response
@@ -521,11 +525,11 @@ def search(request):
     # 搜索结束时间
     end_time = time.time()
     search_time = end_time - start_time
-
+    search_count += user_info.count()
     response = render(request, 'byrbbs/search.html', {"key": key, "page": page, "search_time": search_time,
-                                                      "search_result": search_result, "page_max": page_max,
-                                                      "search_count": search_count, "type": web_type,
-                                                      "date": web_date, 'search_type': search_type})
+                                                      "search_result": search_result, 'user_info': user_info,
+                                                      "page_max": page_max, "search_count": search_count,
+                                                      "type": web_type, "date": web_date, 'search_type': search_type})
     response.set_cookie('type', 'user')
     return response
 
@@ -536,6 +540,8 @@ def search_exact(request, key, page, web_type, search_type, web_date, start_time
     else:
         web_localtime = time.time() - 86400*int(web_date)
         web_strftime = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(web_localtime))
+    # 用户匹配
+    user_info = byr_user.objects.filter(Q(user_id=key) | Q(user_name=key))
 
     # 精确匹配数目
     if web_strftime:
@@ -574,10 +580,11 @@ def search_exact(request, key, page, web_type, search_type, web_date, start_time
     # 搜索结束时间
     end_time = time.time()
     search_time = end_time - start_time
+    search_count += user_info.count()
     response = render(request, 'byrbbs/search.html', {"key": key, "page": page, "search_time": search_time,
-                                                      "search_result": search_result, "page_max": page_max,
-                                                      "search_count": search_count, "type": web_type,
-                                                      "date": web_date, 'search_type': search_type})
+                                                      "search_result": search_result, 'user_info': user_info,
+                                                      "page_max": page_max, "search_count": search_count,
+                                                      "type": web_type, "date": web_date, 'search_type': search_type})
     response.set_cookie('type', 'user')
     return response
 
@@ -611,7 +618,41 @@ def user(request):
         except:
             return HttpResponse('查无此人')
 
-    return render(request, 'byrbbs/userInfo.html', {'user_info': user_info, 'user_id': user_id})
+    post_result = byr_post.objects.raw("SELECT id, publish_time from post where user_id=%s order by publish_time", [user_id])
+    count = 0
+    post_date_num = [0]
+    post_date = ["2004/05/28"]
+    post_year_num = [0]*13
+    post_month_num = [0]*12
+    post_day_num = [0]*31
+    post_weekday_num = [0]*7
+    post_hour_num = [0]*24
+    for i in post_result:
+        cdatetime = i.publish_time
+        cdate = str(cdatetime.date()).replace("-", "/")
+        cyear = cdatetime.year-2004
+        cmonth = cdatetime.month-1
+        cday = cdatetime.day-1
+        cweekday = cdatetime.weekday()
+        chour = cdatetime.hour
+
+        # 日期
+        if cdate == post_date[count]:
+            post_date_num[count] += 1
+        else:
+            post_date.append(cdate)
+            post_date_num.append(1)
+            count += 1
+        post_year_num[cyear] += 1
+        post_month_num[cmonth] += 1
+        post_day_num[cday] += 1
+        post_weekday_num[cweekday] += 1
+        post_hour_num[chour] += 1
+
+    post = {"post_date": post_date, "post_date_num": post_date_num, "post_year_num": post_year_num,
+            "post_month_num": post_month_num, "post_day_num": post_day_num, "post_weekday_num": post_weekday_num,
+            "post_hour_num": post_hour_num}
+    return render(request, 'byrbbs/userInfo.html', {'user_info': user_info, 'user_id': user_id, 'post': post})
 
 
 def data(request):
