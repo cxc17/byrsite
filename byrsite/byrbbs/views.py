@@ -652,7 +652,44 @@ def user(request):
     post = {"post_date": post_date, "post_date_num": post_date_num, "post_year_num": post_year_num,
             "post_month_num": post_month_num, "post_day_num": post_day_num, "post_weekday_num": post_weekday_num,
             "post_hour_num": post_hour_num}
-    return render(request, 'byrbbs/userInfo.html', {'user_info': user_info, 'user_id': user_id, 'post': post})
+
+    comment_result = byr_comment.objects.raw("SELECT id, publish_time from comment where user_id=%s order by publish_time", [user_id])
+    count = 0
+    comment_date_num = [0]
+    comment_date = ["2004/05/28"]
+    comment_year_num = [0]*13
+    comment_month_num = [0]*12
+    comment_day_num = [0]*31
+    comment_weekday_num = [0]*7
+    comment_hour_num = [0]*24
+    for i in comment_result:
+        cdatetime = i.publish_time
+        cdate = str(cdatetime.date()).replace("-", "/")
+        cyear = cdatetime.year-2004
+        cmonth = cdatetime.month-1
+        cday = cdatetime.day-1
+        cweekday = cdatetime.weekday()
+        chour = cdatetime.hour
+
+        # 日期
+        if cdate == comment_date[count]:
+            comment_date_num[count] += 1
+        else:
+            comment_date.append(cdate)
+            comment_date_num.append(1)
+            count += 1
+        comment_year_num[cyear] += 1
+        comment_month_num[cmonth] += 1
+        comment_day_num[cday] += 1
+        comment_weekday_num[cweekday] += 1
+        comment_hour_num[chour] += 1
+
+    comment = {"comment_date": comment_date, "comment_date_num": comment_date_num, "comment_year_num": comment_year_num,
+               "comment_month_num": comment_month_num, "comment_day_num": comment_day_num,
+               "comment_weekday_num": comment_weekday_num, "comment_hour_num": comment_hour_num}
+
+    return render(request, 'byrbbs/userInfo.html', {'user_info': user_info, 'user_id': user_id, 'post': post,
+                                                    'comment': comment})
 
 
 def data(request):

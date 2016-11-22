@@ -64,6 +64,7 @@ class byr_user(models.Model):
     face_url = models.CharField(max_length=255)
     face_height = models.FloatField()
     face_width = models.FloatField()
+    # insert_time = models.DateTimeField(blank=True)
 
     class Meta:
         db_table = 'user'

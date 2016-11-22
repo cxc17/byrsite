@@ -32,3 +32,7 @@ def post_date(post, tp):
     return json.dumps(post[tp], ensure_ascii=False)
 
 
+# 获取各类型时间发帖数量
+@register.filter
+def post_num(data_info, tp):
+    return data_info[tp]
