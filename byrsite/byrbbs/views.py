@@ -95,7 +95,7 @@ def search_all(request):
         index_list = json.loads(str(index.list))
         # import re
         # index_list = re.split(r",|:", index.list)
-        index_IDF = int(log(500000/index.doc_fre))
+        index_IDF = int(log(400000/index.doc_fre))
         # for i in xrange(0, len(index_list), 2):
         #     all_index[index_list[i]] += index_IDF * int(index_list[i+1])
         for k, v in index_list.items():
@@ -105,7 +105,7 @@ def search_all(request):
                                            % "\",\"".join(key_info_stop))
         for index in post_index:
             index_list = json.loads(str(index.list))
-            index_IDF = int(log(500000/index.doc_fre))
+            index_IDF = int(log(400000/index.doc_fre))
             for k, v in index_list.items():
                 all_index[k] += index_IDF * v
             if len(all_index) != 0:
@@ -169,7 +169,6 @@ def search_all(request):
 
         response.set_cookie('type', 'all')
         return response
-
     post_result = byr_post.objects.filter(Q(user_id=key) | Q(user_name=key))
     comment_result = byr_comment.objects.filter(Q(user_id=key) | Q(user_name=key))
     # 当搜索页面等于结果查找
@@ -199,9 +198,9 @@ def search_all(request):
         start_num = search_count_exact % 10
         # 精确匹配结果
         search_result = []
-        search_result.extend(comment_result[min(0, comment_count-start_num):comment_count])
+        search_result.extend(comment_result[max(0, comment_count-start_num):comment_count])
         if len(search_result) < 10:
-            search_result.extend(post_result[min(0, post_count-(start_num-len(search_result))):post_count])
+            search_result.extend(post_result[max(0, post_count-(start_num-len(search_result))):post_count])
         search_result_count = len(search_result)
 
         # post模糊匹配
@@ -353,7 +352,6 @@ def search(request):
 
     # 用户匹配
     user_info = byr_user.objects.filter(Q(user_id=key) | Q(user_name=key))
-
     # 精确匹配数目
     post_result = byr_post.objects.filter(Q(user_id=key) | Q(user_name=key)).order_by("-publish_time")
     post_count = post_result.count()
@@ -567,7 +565,7 @@ def search_exact(request, key, page, web_type, search_type, web_date, start_time
     if page <= 0:
         page = 1
     elif page > page_max:
-        page = page_max
+        page = max(1, page_max)
 
     # 精确匹配结果
     result_exact = []
@@ -597,7 +595,7 @@ def user(request):
         user_info = user_info[0]
     except:
         url = "https://bbs.byr.cn/user/query/%s.json" % user_id
-        req = urllib2.Request(url, headers={'cookie': 'nforum[UTMPUSERID]=byrsearch; nforum[PASSWORD]=BtdtuHp0XFn0LO4gXsV9zw%3D%3D;',
+        req = urllib2.Request(url, headers={'cookie': 'nforum[UTMPUSERID]=byrdata; nforum[PASSWORD]=POtvs%2BkhqgVoWBVTalh2VA%3D%3D;',
                                             'x-requested-with': 'XMLHttpRequest'})
         info = urllib2.urlopen(req).read()
         try:
@@ -615,81 +613,98 @@ def user(request):
                 user_info["gender"] = u'保密'
             user_info["last_login_time"] = time.strftime("%Y/%m/%d %H:%M:%S", time.localtime(float(user_info["last_login_time"])))
             user_info["status"] = user_info["status"].split(u"，")[0]
+            user_info["last_login_bupt"] = 'NULL'
+            user_info["post_num"] = 0
+            user_info["comment_num"] = 0
+            return render(request, 'byrbbs/userInfo.html', {'user_info': user_info, 'user_id': user_id})
         except:
             return HttpResponse('查无此人')
 
     post_result = byr_post.objects.raw("SELECT id, publish_time from post where user_id=%s order by publish_time", [user_id])
-    count = 0
-    post_date_num = [0]
-    post_date = ["2004/05/28"]
-    post_year_num = [0]*13
-    post_month_num = [0]*12
-    post_day_num = [0]*31
-    post_weekday_num = [0]*7
-    post_hour_num = [0]*24
-    for i in post_result:
-        cdatetime = i.publish_time
-        cdate = str(cdatetime.date()).replace("-", "/")
-        cyear = cdatetime.year-2004
-        cmonth = cdatetime.month-1
-        cday = cdatetime.day-1
-        cweekday = cdatetime.weekday()
-        chour = cdatetime.hour
+    try:
+        last_post = byr_post.objects.raw("SELECT id, url, title from post where user_id=%s order by publish_time desc "
+                                         "limit 1", [user_id])[0]
+        count = 0
+        post_date_num = [0]
+        post_date = ["2004/05/28"]
+        post_year_num = [0]*13
+        post_month_num = [0]*12
+        post_day_num = [0]*31
+        post_weekday_num = [0]*7
+        post_hour_num = [0]*24
+        for i in post_result:
+            cdatetime = i.publish_time
+            cdate = str(cdatetime.date()).replace("-", "/")
+            cyear = cdatetime.year-2004
+            cmonth = cdatetime.month-1
+            cday = cdatetime.day-1
+            cweekday = cdatetime.weekday()
+            chour = cdatetime.hour
 
-        # 日期
-        if cdate == post_date[count]:
-            post_date_num[count] += 1
-        else:
-            post_date.append(cdate)
-            post_date_num.append(1)
-            count += 1
-        post_year_num[cyear] += 1
-        post_month_num[cmonth] += 1
-        post_day_num[cday] += 1
-        post_weekday_num[cweekday] += 1
-        post_hour_num[chour] += 1
+            # 日期
+            if cdate == post_date[count]:
+                post_date_num[count] += 1
+            else:
+                post_date.append(cdate)
+                post_date_num.append(1)
+                count += 1
+            post_year_num[cyear] += 1
+            post_month_num[cmonth] += 1
+            post_day_num[cday] += 1
+            post_weekday_num[cweekday] += 1
+            post_hour_num[chour] += 1
 
-    post = {"post_date": post_date, "post_date_num": post_date_num, "post_year_num": post_year_num,
-            "post_month_num": post_month_num, "post_day_num": post_day_num, "post_weekday_num": post_weekday_num,
-            "post_hour_num": post_hour_num}
+        post = {"post_date": post_date, "post_date_num": post_date_num, "post_year_num": post_year_num,
+                "post_month_num": post_month_num, "post_day_num": post_day_num, "post_weekday_num": post_weekday_num,
+                "post_hour_num": post_hour_num}
+    except:
+        last_post = ''
+        post = ''
 
-    comment_result = byr_comment.objects.raw("SELECT id, publish_time from comment where user_id=%s order by publish_time", [user_id])
-    count = 0
-    comment_date_num = [0]
-    comment_date = ["2004/05/28"]
-    comment_year_num = [0]*13
-    comment_month_num = [0]*12
-    comment_day_num = [0]*31
-    comment_weekday_num = [0]*7
-    comment_hour_num = [0]*24
-    for i in comment_result:
-        cdatetime = i.publish_time
-        cdate = str(cdatetime.date()).replace("-", "/")
-        cyear = cdatetime.year-2004
-        cmonth = cdatetime.month-1
-        cday = cdatetime.day-1
-        cweekday = cdatetime.weekday()
-        chour = cdatetime.hour
+    comment_result = byr_comment.objects.raw("SELECT id, publish_time from comment where user_id=%s order by "
+                                             "publish_time", [user_id])
+    try:
+        last_comment = byr_post.objects.raw("SELECT id, url, title from comment where user_id=%s order by publish_time "
+                                            "desc limit 1", [user_id])[0]
+        count = 0
+        comment_date_num = [0]
+        comment_date = ["2004/05/28"]
+        comment_year_num = [0]*13
+        comment_month_num = [0]*12
+        comment_day_num = [0]*31
+        comment_weekday_num = [0]*7
+        comment_hour_num = [0]*24
+        for i in comment_result:
+            cdatetime = i.publish_time
+            cdate = str(cdatetime.date()).replace("-", "/")
+            cyear = cdatetime.year-2004
+            cmonth = cdatetime.month-1
+            cday = cdatetime.day-1
+            cweekday = cdatetime.weekday()
+            chour = cdatetime.hour
 
-        # 日期
-        if cdate == comment_date[count]:
-            comment_date_num[count] += 1
-        else:
-            comment_date.append(cdate)
-            comment_date_num.append(1)
-            count += 1
-        comment_year_num[cyear] += 1
-        comment_month_num[cmonth] += 1
-        comment_day_num[cday] += 1
-        comment_weekday_num[cweekday] += 1
-        comment_hour_num[chour] += 1
+            # 日期
+            if cdate == comment_date[count]:
+                comment_date_num[count] += 1
+            else:
+                comment_date.append(cdate)
+                comment_date_num.append(1)
+                count += 1
+            comment_year_num[cyear] += 1
+            comment_month_num[cmonth] += 1
+            comment_day_num[cday] += 1
+            comment_weekday_num[cweekday] += 1
+            comment_hour_num[chour] += 1
 
-    comment = {"comment_date": comment_date, "comment_date_num": comment_date_num, "comment_year_num": comment_year_num,
-               "comment_month_num": comment_month_num, "comment_day_num": comment_day_num,
-               "comment_weekday_num": comment_weekday_num, "comment_hour_num": comment_hour_num}
+        comment = {"comment_date": comment_date, "comment_date_num": comment_date_num, "comment_year_num": comment_year_num,
+                   "comment_month_num": comment_month_num, "comment_day_num": comment_day_num,
+                   "comment_weekday_num": comment_weekday_num, "comment_hour_num": comment_hour_num}
+    except:
+        last_comment = ''
+        comment = ''
 
-    return render(request, 'byrbbs/userInfo.html', {'user_info': user_info, 'user_id': user_id, 'post': post,
-                                                    'comment': comment})
+    return render(request, 'byrbbs/userInfo.html', {'user_info': user_info, 'user_id': user_id, 'comment': comment,
+                                                    'post': post, "last_post": last_post, 'last_comment': last_comment})
 
 
 def data(request):

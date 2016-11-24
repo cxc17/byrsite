@@ -20,10 +20,14 @@ def image_length(length):
 # 用户登录地点
 @register.filter
 def last_site(result):
-    if result.last_login_bupt != '':
-        return u"北邮" + result.last_login_bupt
-    else:
-        return result.country_cn + result.province
+    try:
+        if result['last_login_bupt'] == 'NULL':
+            return ""
+    except:
+        if result.last_login_bupt != '':
+            return u"(北邮" + result.last_login_bupt + u")"
+        else:
+            return u"(" + result.country_cn + result.province + u")"
 
 
 # 获取发帖日期列表

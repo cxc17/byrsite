@@ -86,6 +86,7 @@ dl{
 }
 
 .chart{
+    padding-left: 5%;
     height: 400px;
     max-width: 85%;
 }
