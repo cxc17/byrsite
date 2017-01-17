@@ -23,7 +23,7 @@
 
             option = {
                 title: {
-                    text: '用户发帖时间分布',
+                    text: '用户发帖日期分布',
                     x: 'center'
                 },
                 tooltip: {
@@ -83,13 +83,18 @@
             myChart.setOption(option);
         </script>
 
-
+        </br></br></br></br></br></br>
+        <hr style="	border-top:1px ridge #cbcbcb;margin-top: 0px;margin-right: 3%;"/>
         <div id="post_hour" style="height: 600px;max-width: 97%;"></div>
         <script type="text/javascript">
             // 基于准备好的dom，初始化echarts实例
             var myChart = echarts.init(document.getElementById('post_hour'));
 
             option = {
+                title: {
+                    text: '一天各时段发帖分布',
+                    x: 'center'
+                },
                 tooltip: {
                     trigger: 'axis'
                 },
@@ -102,7 +107,8 @@
                     }
                 },
                 legend: {
-                    data:['男生','女生','全部']
+                    data:['男生','女生','全部'],
+                    left: 'auto'
                 },
                 xAxis: [
                     {
@@ -143,13 +149,18 @@
             myChart.setOption(option);
         </script>
 
-
+        </br></br></br></br></br></br>
+        <hr style="	border-top:1px ridge #cbcbcb;margin-top: 0px;margin-right: 3%;"/>
         <div id="post_weekday" style="height: 600px;max-width: 97%;"></div>
         <script type="text/javascript">
             // 基于准备好的dom，初始化echarts实例
             var myChart = echarts.init(document.getElementById('post_weekday'));
 
             option = {
+                title: {
+                    text: '一周每天发帖分布',
+                    x: 'center'
+                },
                 tooltip: {
                     trigger: 'axis'
                 },
@@ -162,7 +173,8 @@
                     }
                 },
                 legend: {
-                    data:['男生','女生','全部']
+                    data:['男生','女生','全部'],
+                    left: 'auto'
                 },
                 xAxis: [
                     {
@@ -202,13 +214,18 @@
             myChart.setOption(option);
         </script>
 
-
+        </br></br></br></br></br></br>
+        <hr style="	border-top:1px ridge #cbcbcb;margin-top: 0px;margin-right: 3%;"/>
         <div id="post_day" style="height: 600px;max-width: 97%;"></div>
         <script type="text/javascript">
             // 基于准备好的dom，初始化echarts实例
             var myChart = echarts.init(document.getElementById('post_day'));
 
             option = {
+                title: {
+                    text: '一月每天发帖分布',
+                    x: 'center'
+                },
                 tooltip: {
                     trigger: 'axis'
                 },
@@ -221,7 +238,8 @@
                     }
                 },
                 legend: {
-                    data:['男生','女生','全部']
+                    data:['男生','女生','全部'],
+                    left: 'auto'
                 },
                 xAxis: [
                     {
@@ -262,13 +280,18 @@
             myChart.setOption(option);
         </script>
 
-
+        </br></br></br></br></br></br>
+        <hr style="	border-top:1px ridge #cbcbcb;margin-top: 0px;margin-right: 3%;"/>
         <div id="post_month" style="height: 600px;max-width: 97%;"></div>
         <script type="text/javascript">
             // 基于准备好的dom，初始化echarts实例
             var myChart = echarts.init(document.getElementById('post_month'));
 
             option = {
+                title: {
+                    text: '一年每月发帖分布',
+                    x: 'center'
+                },
                 tooltip: {
                     trigger: 'axis'
                 },
@@ -281,7 +304,8 @@
                     }
                 },
                 legend: {
-                    data:['男生','女生','全部']
+                    data:['男生','女生','全部'],
+                    left: 'auto'
                 },
                 xAxis: [
                     {
@@ -321,13 +345,18 @@
             myChart.setOption(option);
         </script>
 
-
+        </br></br></br></br></br></br>
+        <hr style="	border-top:1px ridge #cbcbcb;margin-top: 0px;margin-right: 3%;"/>
         <div id="post_yaer" style="height: 600px;max-width: 97%;"></div>
         <script type="text/javascript">
             // 基于准备好的dom，初始化echarts实例
             var myChart = echarts.init(document.getElementById('post_yaer'));
 
             option = {
+                title: {
+                    text: '每年发帖分布',
+                    x: 'center'
+                },
                 tooltip: {
                     trigger: 'axis'
                 },
@@ -340,13 +369,14 @@
                     }
                 },
                 legend: {
-                    data:['男生','女生','全部']
+                    data:['男生','女生','全部'],
+                    left: 'auto'
                 },
                 xAxis: [
                     {
                         name : '年份',
                         type: 'category',
-                        data: ['2004', '2005', '2006', '2007', '2008', '2009', '2010', '2011', '2012', '2013', '2014', '2015', '2016'],
+                        data: ['2004', '2005', '2006', '2007', '2008', '2009', '2010', '2011', '2012', '2013', '2014', '2015', '2016', '2017'],
                         axisLabel :{
                                 interval:0
                             }
@@ -362,12 +392,12 @@
                     {
                         name:'男生',
                         type:'bar',
-                        data:{% post_num data_info 'post_year_num' 'all' %}
+                        data:{% post_num data_info 'post_year_num' 'boy' %}
                     },
                     {
                         name:'女生',
                         type:'bar',
-                        data:{% post_num data_info 'post_year_num' 'all' %}
+                        data:{% post_num data_info 'post_year_num' 'girl' %}
                     },
                     {
                         name:'全部',

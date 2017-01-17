@@ -627,7 +627,7 @@ def user(request):
         count = 0
         post_date_num = [0]
         post_date = ["2004/05/28"]
-        post_year_num = [0]*13
+        post_year_num = [0]*14
         post_month_num = [0]*12
         post_day_num = [0]*31
         post_weekday_num = [0]*7
@@ -669,7 +669,7 @@ def user(request):
         count = 0
         comment_date_num = [0]
         comment_date = ["2004/05/28"]
-        comment_year_num = [0]*13
+        comment_year_num = [0]*14
         comment_month_num = [0]*12
         comment_day_num = [0]*31
         comment_weekday_num = [0]*7
@@ -695,7 +695,6 @@ def user(request):
             comment_day_num[cday] += 1
             comment_weekday_num[cweekday] += 1
             comment_hour_num[chour] += 1
-
         comment = {"comment_date": comment_date, "comment_date_num": comment_date_num, "comment_year_num": comment_year_num,
                    "comment_month_num": comment_month_num, "comment_day_num": comment_day_num,
                    "comment_weekday_num": comment_weekday_num, "comment_hour_num": comment_hour_num}
