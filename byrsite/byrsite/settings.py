@@ -23,7 +23,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'k*!i#@5w$j&_0v#_nrw9rf*bjy&p!8#k*59)^k1h3d%0%h%7z='
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ["*"]
 
@@ -127,7 +127,7 @@ USE_TZ = False
 
 
 STATIC_URL = '/static/'
-STATIC_ROOT = '/static/'
+# STATIC_ROOT = '/static/'
 # # print BASE_DIR
 # STATICFILES_DIRS = (
 #     "/Users/caixiaochuan/Desktop/byrsite/byrsite/byrbbs/static",

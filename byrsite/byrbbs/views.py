@@ -731,7 +731,9 @@ def data(request):
         elif data_name == 'comment':
             return render(request, 'byrbbs/data_type/data_comment.html', {'data_info': data_info})
         elif data_name == 'introduce':
-            return render(request, 'byrbbs/data_type/data_introduce.html')
+            import datetime
+            data_info = datetime.date.today()
+            return render(request, 'byrbbs/data_type/data_introduce.html', {'data_info': data_info})
 
     return render(request, 'byrbbs/data.html')
 
@@ -742,3 +744,15 @@ def get_page(count):
         return count / 10 + 1, count % 10
     else:
         return count / 10, 0
+
+
+def verify(request):
+    return HttpResponse('63633e2e1ada5f1d0045ef5b09364cdf')
+
+
+def robots(request):
+    return HttpResponse('User-agent: * \n')
+
+
+def google_verify(request):
+    return HttpResponse('google-site-verification: googlec6d197596a78ca84.html')

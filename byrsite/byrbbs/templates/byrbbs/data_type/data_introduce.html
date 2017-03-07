@@ -12,10 +12,21 @@
     </head>
 
     <body style="height: 100%">
-        <b style="color: #B03A5B;font-size: 20px;height: 40px;line-height: 40px;">论坛数据介绍</b>
+        <b style="color: #B03A5B;font-size: 20px;height: 40px;line-height: 40px;">北邮人论坛数据介绍</b>
         <hr style="	border-top:1px ridge #cbcbcb;margin-top: 0px;margin-right: 3%;"/>
-
-        <div id="china_map" style="height: 800px;max-width: 97%;"></div>
+        <div id="china_map" style="height: 800px;max-width: 97%;font-family: 'Microsoft Yahei', sans-serif">
+            北邮人论坛数据，主要通过爬取论坛用户数据，分析统计用户各类型数据分布情况。每天定时对数据进行更新。目前，主要包括以下六大数据统计：
+            <ul>
+                <li>北邮用户分布，主要统计北邮内部各位置用户分布情况。</li>
+                <li>全国用户分布，主要统计全国各省市自治区用户分布情况。</li>
+                <li>世界用户分布，主要统计世界各国用户分布情况。</li>
+                <li>用户发帖时间，主要统计用户发帖时间分布情况。</li>
+                <li>用户跟帖时间，主要统计用户跟帖时间分布情况。</li>
+                <li>用户星座数据，主要统计用户星座相关信息分布情况。</li>
+            </ul>
+            <br/><br/><br/>
+            最后数据更新时间：{{ data_info }}
+        </div>
 
     </body>
 </html>
