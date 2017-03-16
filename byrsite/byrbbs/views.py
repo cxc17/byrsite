@@ -56,7 +56,7 @@ def search_all(request):
     start_time = time.time()
 
     # 获取页数参数
-    key = request.GET.get("key")
+    key = request.GET.get("key").strip()
     if "p" in request.GET:
         try:
             page = int(request.GET.get("p"))
@@ -321,7 +321,7 @@ def search(request):
     start_time = time.time()
 
     # 获取页数参数
-    key = request.GET.get("key")
+    key = request.GET.get("key").strip()
     if "p" in request.GET:
         try:
             page = int(request.GET.get("p"))
