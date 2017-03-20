@@ -92,7 +92,12 @@ def search_all(request):
                                        % "\",\"".join(key_info))
     all_index = defaultdict(int)
     for index in post_index[:5]:
-        index_list = json.loads(str(index.list))
+        index_list = str(index.list)
+        try:
+            index_list = json.loads(index_list)
+        except:
+            index_list = index_list.replace(",,", ",")
+            index_list = json.loads(index_list)
         # import re
         # index_list = re.split(r",|:", index.list)
         index_IDF = int(log(400000/index.doc_fre))
