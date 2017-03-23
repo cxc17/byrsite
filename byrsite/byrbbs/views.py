@@ -10,8 +10,12 @@ import urllib2
 import json
 import jieba
 import re
-
 from models import *
+
+
+import sys
+reload(sys)
+sys.setdefaultencoding('utf8')
 
 
 def index(request):
@@ -105,15 +109,21 @@ def search_all(request):
         #     all_index[index_list[i]] += index_IDF * int(index_list[i+1])
         for k, v in index_list.items():
             all_index[k] += index_IDF * v
+
+    # 停用词查询标志
+    stop_label = False
     if len(all_index) == 0:
-        post_index = byr_index.objects.raw("select id, doc_fre, list from post_index where word in (\"%s\")"
+        stop_label = True
+        post_index = byr_index.objects.raw("select id, doc_fre, list from post_index where word in (\"%s\")  limit 500000"
                                            % "\",\"".join(key_info_stop))
         for index in post_index:
-            index_list = json.loads(str(index.list))
-            index_IDF = int(log(400000/index.doc_fre))
-            for k, v in index_list.items():
-                all_index[k] += index_IDF * v
-            if len(all_index) != 0:
+            index_list = str(index.list)
+            index_list = json.loads(index_list)
+            # index_IDF = int(log(max(1, 400000/index.doc_fre)))
+            # for k, v in index_list.items():
+            #     all_index[k] += index_IDF * v
+            all_index = index_list
+            if not all_index:
                 break
 
     # 内容匹配数目
@@ -159,7 +169,10 @@ def search_all(request):
 
     # 当搜索页面在结果查找之内
     if page < content_page_max:
-        all_index = sorted(all_index.items(), key=lambda x: x[1], reverse=True)
+        if not stop_label:
+            all_index = sorted(all_index.items(), key=lambda x: x[1], reverse=True)
+        else:
+            all_index = all_index.items()
         search_post_id = []
         for index in all_index[(page-1)*10:page*10]:
             search_post_id.append(index[0])
