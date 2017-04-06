@@ -15,7 +15,7 @@ Including another URLconf
 """
 from django.conf.urls import url, include
 from django.contrib import admin
-from byrbbs.views import verify, robots, google_verify
+from byrbbs.views import verify, google_verify, error
 
 urlpatterns = [
     # url(r'^admin/', admin.site.urls),
@@ -23,6 +23,7 @@ urlpatterns = [
     url(r'', include('byrbbs.urls')),
     url(r'^baidu-verify-08298B55B7.txt', verify),
     url(r'^googlec6d197596a78ca84.html', google_verify),
+    url(r'^.+?/', error),
     # url(r'^robots.txt', robots)
 ]
 

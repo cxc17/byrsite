@@ -774,3 +774,7 @@ def robots(request):
 
 def google_verify(request):
     return HttpResponse('google-site-verification: googlec6d197596a78ca84.html')
+
+
+def error(request):
+    return render(request, 'byrbbs/error.html')

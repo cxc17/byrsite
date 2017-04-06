@@ -1,0 +1,91 @@
+{% load staticfiles %}
+{% load byrbbs_extras %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>404-论坛搜索</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="keywords" content="北邮人论坛搜索,byrsearch,oneseven,cxc17,cxc_17">
+
+    <link rel="icon" sizes="any" mask="" href="{% static 'byrbbs/images/logo_title.png' %}">
+    <link href="http://apps.bdimg.com/libs/bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet" />
+    <script src="http://apps.bdimg.com/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="http://apps.bdimg.com/libs/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="{% static 'byrbbs/search_style.css' %}">
+</head>
+<body>
+
+        <div style="position: relative; min-height:100%; ">
+        <div id="header">
+            <div class="header-brand">
+                <a href="/byrbbs">
+                <img src="{% static 'byrbbs/images/logo.png' %}"  width="100" height="28">
+                </a>
+                <form id="form" method="GET" action="/byrbbs/">
+                    <input class="header-search" type="text" id="bbssearch" name="key" maxlength="40" value="{{ key }}">
+                    <button type="submit" id="search-button" class="search-button">搜 索</button>
+                </form>
+            </div>
+
+            <div id="header-navigation">
+                <div class="{{ type|menu_type:"all" }}"><a href="/byrbbs/?key={{ key|urlencode }}&type=all">全部</a></div>
+                <div class="{{ type|menu_type:"user" }}"><a href="/byrbbs/?key={{ key|urlencode }}&type=user">用户</a></div>
+                <div class="{{ type|menu_type:"data" }}"><a href="/byrbbs/data">数据</a></div>
+
+                <div class="btn-group">
+                    <div id="menu1" data-toggle="dropdown">{{ date|date_type }}<span class="caret"></span></div>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a href="/byrbbs/?key={{ key|urlencode }}&date=all">时间不限</a>
+                        </li>
+                        <li>
+                            <a href="/byrbbs/?key={{ key|urlencode }}&date=1&search_type=exact">一天内</a>
+                        </li>
+                        <li>
+                            <a href="/byrbbs/?key={{ key|urlencode }}&date=7&search_type=exact">一周内</a>
+                        </li>
+                        <li>
+                            <a href="/byrbbs/?key={{ key|urlencode }}&date=30&search_type=exact">一月内</a>
+                        </li>
+                        <li>
+                            <a href="/byrbbs/?key={{ key|urlencode }}&date=365&search_type=exact">一年内</a>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="btn-group">
+                    <div id="menu1" data-toggle="dropdown">{{ search_type|search_type }}<span class="caret"></span></div>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a href="/byrbbs/?key={{ key|urlencode }}&search_type=all">所有结果</a>
+                        </li>
+                        <li>
+                            <a href="/byrbbs/?key={{ key|urlencode }}&search_type=exact">精确匹配</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="container">
+            <div class="list-container">
+                <div class="list box">
+                    <h1 style="padding-top:.33em">错误请求</h1>
+                    <p style="margin-top:1em">错误请求，访问页面不存在，请重新查询或返回 <a href="/byrbbs">首页 </a>。<br/>
+                </div>
+            </div>
+        </div>
+
+        <div id="footer-2">
+            <h5>Copyright © 2016 BUPT::Cxc_17 &nbsp;|
+                <a href="mailto: caixiaochuan@sina.cn">&nbsp;联系我们</a>
+            </h5>
+        </div>
+
+        </div>
+</body>
+</html>
