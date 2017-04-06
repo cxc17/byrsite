@@ -1,6 +1,6 @@
 # byrsite
 
-北邮人论坛搜索网站 【www.oneseven.cc】
+北邮人论坛搜索网站 【 www.oneseven.cc 】
 
 主要功能：
 
