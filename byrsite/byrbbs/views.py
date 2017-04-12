@@ -764,17 +764,21 @@ def get_page(count):
         return count / 10, 0
 
 
+# 百度监控
 def verify(request):
     return HttpResponse('63633e2e1ada5f1d0045ef5b09364cdf')
 
 
+# robots文件
 def robots(request):
     return HttpResponse('User-agent: * \n')
 
 
+# 谷歌监控
 def google_verify(request):
     return HttpResponse('google-site-verification: googlec6d197596a78ca84.html')
 
 
+# 访问错误页面
 def error(request):
     return render(request, 'byrbbs/error.html')
