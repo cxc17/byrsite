@@ -118,7 +118,12 @@ def search_all(request):
                                            % "\",\"".join(key_info_stop))
         for index in post_index:
             index_list = str(index.list)
-            index_list = json.loads(index_list)
+            try:
+                index_list = json.loads(index_list)
+            except:
+                index_list = index_list.replace(",,", ",")
+                index_list = json.loads(index_list)
+
             # index_IDF = int(log(max(1, 400000/index.doc_fre)))
             # for k, v in index_list.items():
             #     all_index[k] += index_IDF * v
