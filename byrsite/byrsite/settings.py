@@ -128,7 +128,7 @@ USE_TZ = False
 
 STATIC_URL = '/static/'
 # STATIC_ROOT = '/static/'
-# # print BASE_DIR
+# print BASE_DIR
 # STATICFILES_DIRS = (
 #     "/Users/caixiaochuan/Desktop/byrsite/byrsite/byrbbs/static",
 #     '/Users/caixiaochuan/Desktop/byrsite/byrsite/byrsite/static',
