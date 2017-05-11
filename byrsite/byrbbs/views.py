@@ -729,6 +729,7 @@ def user(request):
                                                     'post': post, "last_post": last_post, 'last_comment': last_comment})
 
 
+# 数据展示
 def data(request):
     try:
         data_name = request.GET.get("did")
