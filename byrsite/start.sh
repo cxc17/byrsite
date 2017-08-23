@@ -1,7 +1,6 @@
 #!/bin/bash
 
 export PATH=/usr/local/bin:$PATH
-
 cd  /tmp/byrsite
 
 gunicorn --max-requests-jitter 100 \
